@@ -154,7 +154,6 @@ function! RipgrepFzf(query, fullscreen)
 endfunction
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
-
 " Work out whether the line has a comment then reverse that condition...
 nnoremap <silent> # :call ToggleComment()<CR>j0
 vmap <silent> # :call ToggleBlock()<CR>
@@ -204,3 +203,5 @@ function! ToggleBlock () range
     endif
 endfunction
 
+" turn off highlighting
+nnoremap \\ :noh<cr>
