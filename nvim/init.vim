@@ -89,7 +89,11 @@ Plug 'jebaum/vim-tmuxify'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/fzf.vim'
+Plug 'vimwiki/vimwiki'
+Plug 'kien/ctrlp.vim'
 call plug#end()
+let g:taskwiki_markup_syntax = 'markdown'
+let g:vimwiki_list=[{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md', 'name': 'nice'}, {'path': '~/vimwiki/steve/*', 'syntax': 'markdown', 'ext': '.md'}, {'path': '~/Documents/vimwiki/client_wikis', 'syntax': 'markdown', 'ext': '.md'} ]
 
 " tmux navigator
 let g:tmux_navigator_no_mappings = 1
