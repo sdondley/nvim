@@ -27,6 +27,7 @@ filetype plugin indent on
 hi Folded ctermbg=black
 autocmd BufWritePre FileType perl  %s/\s\+$//e
 
+
 " Uncomment the following to have Vim jump to the last position when
 " reopening a file
 "au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -48,6 +49,7 @@ autocmd BufWritePre FileType perl  %s/\s\+$//e
 
 
 set foldopen+=jump
+set splitright
 
 fun! StripTrailingWhitespace()
     if &ft =~ 'ruby\|javascript\|perl'
@@ -90,7 +92,8 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/fzf.vim'
 Plug 'vimwiki/vimwiki'
-Plug 'kien/ctrlp.vim'
+Plug 'c9s/perlomni.vim'
+"Plug 'kien/ctrlp.vim'
 call plug#end()
 let g:taskwiki_markup_syntax = 'markdown'
 let g:vimwiki_list=[{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md', 'name': 'nice'}, {'path': '~/vimwiki/steve/*', 'syntax': 'markdown', 'ext': '.md'}, {'path': '~/Documents/vimwiki/client_wikis', 'syntax': 'markdown', 'ext': '.md'} ]
@@ -98,6 +101,10 @@ let g:vimwiki_list=[{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md', '
 " tmux navigator
 let g:tmux_navigator_no_mappings = 1
 let g:tmux_navigator_disable_when_zoomed = 1
+"nnoremap <silent> <leader>h :TmuxNavigateLeft<cr>
+"nnoremap <silent> <leader>j :TmuxNavigateDown<cr>
+"nnoremap <silent> <leader>k :TmuxNavigateUp<cr>
+"nnoremap <silent> <leader>l :TmuxNavigateRight<cr>
 nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
 nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
@@ -159,6 +166,11 @@ if has('persistent_undo')
 endif
 
 " advanced fzf/ripgrep integration
+let g:fzf_tags_command = 'ctags --languages=Perl -R --regex-Perl="/^task\s+(''*[a-zA-Z0-9_]+''*)\s{0,}/c/"'
+inoremap <expr> <leader>f fzf#vim#complete#path('rg --files')
+
+
+
 function! RipgrepFzf(query, fullscreen)
   let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
@@ -166,7 +178,11 @@ function! RipgrepFzf(query, fullscreen)
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
+
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+nnoremap <leader>rg :RG<cr>
+nnoremap <leader>rgt :RG ^task '*<cr>
+
 
 " Work out whether the line has a comment then reverse that condition...
 nnoremap <silent> # :call ToggleComment()<CR>j0
