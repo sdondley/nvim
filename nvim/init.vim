@@ -59,13 +59,13 @@ endfun
 
 autocmd BufWritePre * call StripTrailingWhitespace()
 
-augroup Perl_Setup
-    autocmd!
-    autocmd BufNewFile   *  0r !vim_file_template <afile>
-    autocmd BufNewFile   *  :call search('^[ \t]*[#].*implementation[ \t]\+here')
-    " SD added this line per Conway's instructions in email from him
-    autocmd BufNewFile   *  :redraw
-augroup END
+"augroup Perl_Setup
+"    autocmd!
+"    autocmd BufNewFile   *  0r !vim_file_template <afile>
+"    autocmd BufNewFile   *  :call search('^[ \t]*[#].*implementation[ \t]\+here')
+"    " SD added this line per Conway's instructions in email from him
+"    autocmd BufNewFile   *  :redraw
+"augroup END
 
 
 let b:commentChar='#'
@@ -180,7 +180,7 @@ function! RipgrepFzf(query, fullscreen)
   let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command], 'dir': '/home/admin/scripts/lib'}
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
 
