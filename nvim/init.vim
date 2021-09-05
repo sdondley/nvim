@@ -70,9 +70,9 @@ augroup END
 
 let b:commentChar='#'
 autocmd BufNewFile,BufReadPost *.[ch]    let b:commentChar='//'
-autocmd BufNewFile,BufReadPost *.cpp    let b:commentChar='//'
 autocmd BufNewFile,BufReadPost *.py    let b:commentChar='#'
 autocmd BufNewFile,BufReadPost *.*sh    let b:commentChar='#'
+autocmd BufNewFile,BufReadPost *.*vim    let b:commentChar='"'
 function! Docomment ()
   "make comments on all the lines we've grabbed
   execute '''<,''>s/^\s*/&'.escape(b:commentChar, '\/').' /e'
@@ -98,8 +98,7 @@ Plug 'vim-syntastic/syntastic'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'jebaum/vim-tmuxify'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf.vim', { 'branch': 'master' }
 Plug 'vimwiki/vimwiki'
 Plug 'c9s/perlomni.vim'
 "Plug 'kien/ctrlp.vim'
@@ -145,9 +144,6 @@ set conceallevel=2
 syntax match Text /^_desc.*/ conceal
 syntax match Text /^my @.*tas.*/ conceal
 
-iab $R $Rex::CLI::host
-iab args my ($verb) = process_task_args(\@_, verbose => 0);
-iab task task ___ => sub {<return>};<esc>kwcw
 
 " remember last cursor position between files
 augroup redhat
