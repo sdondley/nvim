@@ -10,8 +10,6 @@ set tabstop=4
 set hlsearch
 set incsearch
 set expandtab
-set foldmarker={,}
-set foldmethod=marker
 set number
 set cpt=.,w,b,u,t
 set softtabstop=4
@@ -26,6 +24,7 @@ filetype plugin indent on
 
 hi Folded ctermbg=black
 autocmd BufWritePre FileType perl  %s/\s\+$//e
+set spellfile=~/git_repos/dotfiles2/nvim/spell/en.utf-8.add
 
 
 " Uncomment the following to have Vim jump to the last position when
@@ -101,18 +100,13 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim', { 'branch': 'master' }
 Plug 'vimwiki/vimwiki'
 Plug 'c9s/perlomni.vim'
-"Plug 'kien/ctrlp.vim'
+Plug 'sedm0784/vim-you-autocorrect'
 call plug#end()
 let g:taskwiki_markup_syntax = 'markdown'
-let g:vimwiki_list=[{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md', 'name': 'nice'}, {'path': '~/vimwiki/steve/*', 'syntax': 'markdown', 'ext': '.md'}, {'path': '~/Documents/vimwiki/client_wikis', 'syntax': 'markdown', 'ext': '.md'} ]
 
 " tmux navigator
 let g:tmux_navigator_no_mappings = 1
 let g:tmux_navigator_disable_when_zoomed = 1
-"nnoremap <silent> <leader>h :TmuxNavigateLeft<cr>
-"nnoremap <silent> <leader>j :TmuxNavigateDown<cr>
-"nnoremap <silent> <leader>k :TmuxNavigateUp<cr>
-"nnoremap <silent> <leader>l :TmuxNavigateRight<cr>
 nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
 nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
@@ -174,24 +168,26 @@ endif
 let g:fzf_tags_command = 'ctags --languages=Perl -R --regex-Perl="/^task\s+(''*[a-zA-Z0-9_]+''*)\s{0,}/c/"'
 inoremap <expr> <leader>f fzf#vim#complete#path('rg --files')
 
-
-
-function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
-  let initial_command = printf(command_fmt, shellescape(a:query))
-  let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command], 'dir': '/home/admin/scripts/lib'}
+function! RipgrepFzf(query, fullscreen, dir)
+  let command_fmt = 'rg -L --column --line-number --no-heading --color=always --smart-case %s %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query), a:dir)
+  let reload_command = printf(command_fmt, '{q}', a:dir)
+  let spec = {'options': ['--delimiter', '/', '--with-nth', '-1', '--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
 
-command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-nnoremap <leader>rg :RG<cr>
-nnoremap <leader>rgt :RG ^task '*<cr>
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0, '.')
+command! -nargs=* -bang RGR call RipgrepFzf(<q-args>, <bang>0, '~/scripts/lib')
+command! -nargs=* -bang RGN call RipgrepFzf(<q-args>, <bang>0, '~/notes')
+nnoremap <leader>rgg :RG<cr>
+nnoremap <leader>rgr :RGR<cr> # for bastion only
+nnoremap <leader>rgn :RGN<cr>
+nnoremap <leader>rgt :RGT ^task '*<cr>
 
 
 " Work out whether the line has a comment then reverse that condition...
-nnoremap <silent> # :call ToggleComment()<CR>j0
-vmap <silent> # :call ToggleBlock()<CR>
+"nnoremap <silent> # :call ToggleComment()<CR>j0
+"vmap <silent> # :call ToggleBlock()<CR>
 function! ToggleComment ()
     " What's the comment character???
     let comment_char = exists('b:cmt') ? b:cmt : '#'
@@ -240,3 +236,53 @@ endfunction
 
 " turn off highlighting
 nnoremap \\ :noh<cr>
+inoremap <Leader><Leader> <c-x><c-f>
+
+
+"<<<<<<<<<<<<<<<<<< fzf >>>>>>>>>>>>>>>>>>>>>>>>>>>
+nnoremap <Leader>f :Files<cr>
+nnoremap <Leader>b :Buffers<cr>
+nnoremap <Leader>l :Lines<cr>
+nnoremap <Leader>bl :Blines<cr>
+"inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
+"<<<<<<<<<<<<<<<<<< fzf end >>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+
+"<<<<<<<<<<<<<<<<<< vimwiki >>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+inoremap <Leader>gu <esc>:silent !~/bin/copy_safari_url.osa <cr>"+pa<space>
+nnoremap <Leader>gu :silent !~/bin/copy_safari_url.osa <cr>"+p<cr>
+let g:vimwiki_list=[{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md', 'name': 'nice'}, {'path': '~/vimwiki/steve/*', 'syntax': 'markdown', 'ext': '.md'}, {'path': '~/Documents/vimwiki/client_wikis', 'syntax': 'markdown', 'ext': '.md'}, {'path': '~/notes/', 'syntax': 'markdown', 'ext': '.md', 'name': 'notes'}, ]
+let g:vimwiki_folding='custom'
+
+function! MyFoldText()
+    let comment = substitute(getline(v:foldstart),"^ *","",1)
+    let linetext = substitute(getline(v:foldstart+1),"^ *","",1)
+    let txt = '+ ' . comment 
+    return txt
+endfunction
+set foldtext=MyFoldText()
+function! VimwikiFoldLevelCustom(lnum)
+let pounds = strlen(matchstr(getline(a:lnum), '^#\+[^[:space:]]'))
+if (pounds)
+  return '>' . pounds  " start a fold level
+endif
+if getline(a:lnum) =~? '\v^\s*$'
+  if (strlen(matchstr(getline(a:lnum + 1), '^#\+')))
+    return '-1' " don't fold last blank line before header
+  endif
+endif
+return '=' " return previous fold level
+endfunction
+
+autocmd FileType vimwiki setlocal foldmethod=expr |
+  \ setlocal foldenable | set foldexpr=VimwikiFoldLevelCustom(v:lnum)
+
+augroup AutoCorrect
+    autocmd!
+    autocmd  FileType  vimwiki  EnableAutocorrect
+augroup END
+
+" <<<<<<<<<<<<<<<<<<<<<<<<< end: vimwiki >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
