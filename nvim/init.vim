@@ -98,9 +98,10 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'jebaum/vim-tmuxify'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim', { 'branch': 'master' }
-Plug 'vimwiki/vimwiki'
+Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 Plug 'c9s/perlomni.vim'
 Plug 'sedm0784/vim-you-autocorrect'
+Plug 'tools-life/taskwiki'
 call plug#end()
 let g:taskwiki_markup_syntax = 'markdown'
 
@@ -169,16 +170,17 @@ let g:fzf_tags_command = 'ctags --languages=Perl -R --regex-Perl="/^task\s+(''*[
 inoremap <expr> <leader>f fzf#vim#complete#path('rg --files')
 
 function! RipgrepFzf(query, fullscreen, dir)
-  let command_fmt = 'rg -L --column --line-number --no-heading --color=always --smart-case %s %s || true'
-  let initial_command = printf(command_fmt, shellescape(a:query), a:dir)
-  let reload_command = printf(command_fmt, '{q}', a:dir)
-  let spec = {'options': ['--delimiter', '/', '--with-nth', '-1', '--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  let command_fmt = 'rg -L --column --line-number --no-heading --color=always --smart-case %s %s | sed "s|%s||g" || true'
+  let initial_command = printf(command_fmt, shellescape(a:query), a:dir, a:dir)
+  let reload_command = printf(command_fmt, '{q}', a:dir, a:dir)
+  "let spec = {'options': ['--delimiter', ':', '--with-nth', '-1', '--preview-window', '+{2}', '--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  let spec = {'options': [ '--preview-window' , '~2', '--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
 
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0, '.')
 command! -nargs=* -bang RGR call RipgrepFzf(<q-args>, <bang>0, '~/scripts/lib')
-command! -nargs=* -bang RGN call RipgrepFzf(<q-args>, <bang>0, '~/notes')
+command! -nargs=* -bang RGN call RipgrepFzf(<q-args>, <bang>0, fnamemodify('~', ':p') . 'notes/')
 nnoremap <leader>rgg :RG<cr>
 nnoremap <leader>rgr :RGR<cr> # for bastion only
 nnoremap <leader>rgn :RGN<cr>
@@ -248,41 +250,48 @@ nnoremap <Leader>bl :Blines<cr>
 "<<<<<<<<<<<<<<<<<< fzf end >>>>>>>>>>>>>>>>>>>>>>>
 
 
-
-
 "<<<<<<<<<<<<<<<<<< vimwiki >>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+let g:vimwiki_folding='custom'
 inoremap <Leader>gu <esc>:silent !~/bin/copy_safari_url.osa <cr>"+pa<space>
 nnoremap <Leader>gu :silent !~/bin/copy_safari_url.osa <cr>"+p<cr>
 let g:vimwiki_list=[{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md', 'name': 'nice'}, {'path': '~/vimwiki/steve/*', 'syntax': 'markdown', 'ext': '.md'}, {'path': '~/Documents/vimwiki/client_wikis', 'syntax': 'markdown', 'ext': '.md'}, {'path': '~/notes/', 'syntax': 'markdown', 'ext': '.md', 'name': 'notes'}, ]
-let g:vimwiki_folding='custom'
 
-function! MyFoldText()
-    let comment = substitute(getline(v:foldstart),"^ *","",1)
-    let linetext = substitute(getline(v:foldstart+1),"^ *","",1)
-    let txt = '+ ' . comment 
-    return txt
-endfunction
-set foldtext=MyFoldText()
-function! VimwikiFoldLevelCustom(lnum)
-let pounds = strlen(matchstr(getline(a:lnum), '^#\+[^[:space:]]'))
-if (pounds)
-  return '>' . pounds  " start a fold level
-endif
-if getline(a:lnum) =~? '\v^\s*$'
-  if (strlen(matchstr(getline(a:lnum + 1), '^#\+')))
-    return '-1' " don't fold last blank line before header
-  endif
-endif
-return '=' " return previous fold level
-endfunction
-
-autocmd FileType vimwiki setlocal foldmethod=expr |
-  \ setlocal foldenable | set foldexpr=VimwikiFoldLevelCustom(v:lnum)
-
-augroup AutoCorrect
-    autocmd!
-    autocmd  FileType  vimwiki  EnableAutocorrect
-augroup END
+" also look in after/ftplugin/vimwiki.vim for additional settings
 
 " <<<<<<<<<<<<<<<<<<<<<<<<< end: vimwiki >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+"
+" <<<<<<<<<<<<<<<<<< taskwiki >>>>>>>>>>>>>>>>>>>>>>>>>>>
+iab *[ * [ ]
+let g:taskwiki_extra_warriors={'W': {'data_location': '~/.task_work', 'taskrc_location': '~/.taskrc_work'}}
+" <<<<<<<<<<<<<<<<<<<<<<<<< end: taskwiki >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+"
+noremap <silent> <Leader>w :call ToggleWrap()<CR>
+function ToggleWrap()
+  if &wrap
+    echo "Wrap OFF"
+    setlocal nowrap
+    set virtualedit=all
+    silent! nunmap <buffer> <Up>
+    silent! nunmap <buffer> <Down>
+    silent! nunmap <buffer> <Home>
+    silent! nunmap <buffer> <End>
+    silent! iunmap <buffer> <Up>
+    silent! iunmap <buffer> <Down>
+    silent! iunmap <buffer> <Home>
+    silent! iunmap <buffer> <End>
+  else
+    echo "Wrap ON"
+    setlocal wrap linebreak nolist
+    set virtualedit=
+    setlocal display+=lastline
+    noremap  <buffer> <silent> <Up>   gk
+    noremap  <buffer> <silent> <Down> gj
+    noremap  <buffer> <silent> <Home> g<Home>
+    noremap  <buffer> <silent> <End>  g<End>
+    inoremap <buffer> <silent> <Up>   <C-o>gk
+    inoremap <buffer> <silent> <Down> <C-o>gj
+    inoremap <buffer> <silent> <Home> <C-o>g<Home>
+    inoremap <buffer> <silent> <End>  <C-o>g<End>
+  endif
+endfunction
