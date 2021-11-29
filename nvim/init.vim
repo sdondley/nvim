@@ -101,7 +101,7 @@ Plug 'junegunn/fzf.vim', { 'branch': 'master' }
 Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 Plug 'c9s/perlomni.vim'
 Plug 'sedm0784/vim-you-autocorrect'
-Plug 'tools-life/taskwiki'
+Plug 'tools-life/taskwiki', { 'branch': 'master' }
 call plug#end()
 let g:taskwiki_markup_syntax = 'markdown'
 
@@ -263,7 +263,8 @@ let g:vimwiki_list=[{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md', '
 "
 " <<<<<<<<<<<<<<<<<< taskwiki >>>>>>>>>>>>>>>>>>>>>>>>>>>
 iab *[ * [ ]
-let g:taskwiki_extra_warriors={'W': {'data_location': '~/.task_work', 'taskrc_location': '~/.taskrc_work'}}
+let g:taskwiki_extra_warriors={'W': {'data_location': '~/.task_work', 'taskrc_location': '~/.taskrc'}}
+let g:taskwiki_disable_concealcursor=1
 " <<<<<<<<<<<<<<<<<<<<<<<<< end: taskwiki >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 "
 noremap <silent> <Leader>w :call ToggleWrap()<CR>
