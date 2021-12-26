@@ -14,4 +14,4 @@ iab args my ($verb) = process_task_args(\@_, verbose => 0);
 iab $R $Rex::CLI::host
 iab task task ___ => sub {<return>};<esc>kwcw
 
-
+hi Folded ctermbg=black

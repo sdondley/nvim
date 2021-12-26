@@ -18,13 +18,22 @@ set autoindent
 set number
 set backupdir=~/.cache/nvim
 let mapleader = ';'
+set ignorecase
+set smartcase
+set timeoutlen=400
+
 
 filetype plugin on
 filetype plugin indent on
 
-hi Folded ctermbg=black
+"hi Folded ctermbg=black
 autocmd BufWritePre FileType perl  %s/\s\+$//e
 set spellfile=~/git_repos/dotfiles2/nvim/spell/en.utf-8.add
+
+
+
+" avoid annoying keypress when opening/closing terminal
+"autocmd BufWinEnter,WinEnter,  term://* startinsert
 
 
 " Uncomment the following to have Vim jump to the last position when
@@ -46,6 +55,9 @@ set spellfile=~/git_repos/dotfiles2/nvim/spell/en.utf-8.add
 "set hidden		" Hide buffers when they are abandoned
 "set mouse=a		" Enable mouse usage (all modes)
 
+iab <l <lt>leader>
+
+nnoremap ;tn :tabnew<space>
 
 set foldopen+=jump
 set splitright
@@ -102,6 +114,8 @@ Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 Plug 'c9s/perlomni.vim'
 Plug 'sedm0784/vim-you-autocorrect'
 Plug 'tools-life/taskwiki', { 'branch': 'master' }
+"Plug 'dense-analysis/ale', { 'branch': 'master' }
+"Plug 'rhysd/vim-grammarous'
 call plug#end()
 let g:taskwiki_markup_syntax = 'markdown'
 
@@ -117,6 +131,7 @@ nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
 "tmuxify
 let g:tmuxify_custom_command = 'tmux split-window -d'
 nnoremap <leader>so :so ~/.config/nvim/init.vim<cr>
+nnoremap <leader>sov :so ~/git_repos/dotfiles2/nvim/after/ftplugin/vimwiki.vim<cr>
 
 highlight Status ctermbg=darkgrey ctermfg=white
 set statusline=%#warningmsg#
@@ -169,21 +184,45 @@ endif
 let g:fzf_tags_command = 'ctags --languages=Perl -R --regex-Perl="/^task\s+(''*[a-zA-Z0-9_]+''*)\s{0,}/c/"'
 inoremap <expr> <leader>f fzf#vim#complete#path('rg --files')
 
+" original function
+
+nnoremap <leader><leader> :w<cr>
+inoremap <leader>' <esc>:w<cr>
+
+
+"original command and function
+" leave commented out unless  doing some testing
+"command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+"function! RipgrepFzf(query, fullscreen)
+"  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+""""  let initial_command = printf(command_fmt, shellescape(a:query))
+"  let reload_command = printf(command_fmt, '{q}')
+"  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+"  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+"endfunction
+
 function! RipgrepFzf(query, fullscreen, dir)
-  let command_fmt = 'rg -L --column --line-number --no-heading --color=always --smart-case %s %s | sed "s|%s||g" || true'
+  let command_fmt = 'rg -L --hidden --column --line-number --no-heading --color=always --smart-case %s %s | sed "s|%s||g" || true'
   let initial_command = printf(command_fmt, shellescape(a:query), a:dir, a:dir)
   let reload_command = printf(command_fmt, '{q}', a:dir, a:dir)
   "let spec = {'options': ['--delimiter', ':', '--with-nth', '-1', '--preview-window', '+{2}', '--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
   let spec = {'options': [ '--preview-window' , '~2', '--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
-
-command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0, '.')
-command! -nargs=* -bang RGR call RipgrepFzf(<q-args>, <bang>0, '~/scripts/lib')
+command! -nargs=* -bang RG call  RipgrepFzf(<q-args>, <bang>0, './')
 command! -nargs=* -bang RGN call RipgrepFzf(<q-args>, <bang>0, fnamemodify('~', ':p') . 'notes/')
+command! -nargs=* -bang RGR call RipgrepFzf(<q-args>, <bang>0, '~/scripts/lib')
+
+" search in current directory
 nnoremap <leader>rgg :RG<cr>
-nnoremap <leader>rgr :RGR<cr> # for bastion only
+
+" for bastion only
+nnoremap <leader>rgr :RGR<cr>
+
+" search through notes directory
 nnoremap <leader>rgn :RGN<cr>
+
+ " search for tasks
 nnoremap <leader>rgt :RGT ^task '*<cr>
 
 
@@ -241,21 +280,23 @@ nnoremap \\ :noh<cr>
 inoremap <Leader><Leader> <c-x><c-f>
 
 
+
 "<<<<<<<<<<<<<<<<<< fzf >>>>>>>>>>>>>>>>>>>>>>>>>>>
 nnoremap <Leader>f :Files<cr>
 nnoremap <Leader>b :Buffers<cr>
 nnoremap <Leader>l :Lines<cr>
 nnoremap <Leader>bl :Blines<cr>
-"inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
+inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
+inoremap <expr> ;xf fzf#vim#complete#path('rg --files')
 "<<<<<<<<<<<<<<<<<< fzf end >>>>>>>>>>>>>>>>>>>>>>>
 
 
 "<<<<<<<<<<<<<<<<<< vimwiki >>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 let g:vimwiki_folding='custom'
-inoremap <Leader>gu <esc>:silent !~/bin/copy_safari_url.osa <cr>"+pa<space>
-nnoremap <Leader>gu :silent !~/bin/copy_safari_url.osa <cr>"+p<cr>
-let g:vimwiki_list=[{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md', 'name': 'nice'}, {'path': '~/vimwiki/steve/*', 'syntax': 'markdown', 'ext': '.md'}, {'path': '~/Documents/vimwiki/client_wikis', 'syntax': 'markdown', 'ext': '.md'}, {'path': '~/notes/', 'syntax': 'markdown', 'ext': '.md', 'name': 'notes'}, ]
+let g:vimwiki_list=[{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md', 'name': 'nice'}, {'path': '~/vimwiki/steve/*', 'syntax': 'markdown', 'ext': '.md'}, {'path': '~/Documents/vimwiki/client_wikis', 'syntax': 'markdown', 'ext': '.md'}, {'path': '~/notes/', 'auto_toc': 1, 'syntax': 'markdown', 'ext': '.md', 'name': 'notes'}, ]
+
+autocmd BufEnter *.txt set filetype=vimwiki
 
 " also look in after/ftplugin/vimwiki.vim for additional settings
 
@@ -265,8 +306,20 @@ let g:vimwiki_list=[{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md', '
 iab *[ * [ ]
 let g:taskwiki_extra_warriors={'W': {'data_location': '~/.task_work', 'taskrc_location': '~/.taskrc'}}
 let g:taskwiki_disable_concealcursor=1
+let g:taskwiki_sort_order='urgency-,due+,status+,end+,project+'
+let g:taskwiki_sort_orders={ 'C': 'end-' }
 " <<<<<<<<<<<<<<<<<<<<<<<<< end: taskwiki >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-"
+
+" <<<<<<<<<<<<<<<<<< ale >>>>>>>>>>>>>>>>>>>>>>>>>>>
+let g:ale_linters = {
+    \ 'python': ['pylint'],
+    \ 'vim': ['vint'],
+    \ 'cpp': ['clang'],
+    \ 'c': ['clang'],
+    \ 'markdown': ['languagetool']
+\}
+" <<<<<<<<<<<<<<<<<<<<<<<<< end: taskwiki >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 noremap <silent> <Leader>w :call ToggleWrap()<CR>
 function ToggleWrap()
   if &wrap
@@ -296,3 +349,62 @@ function ToggleWrap()
     inoremap <buffer> <silent> <End>  <C-o>g<End>
   endif
 endfunction
+
+nnoremap <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+" Go to tab by number
+noremap <leader>1 1gt
+noremap <leader>2 2gt
+noremap <leader>3 3gt
+noremap <leader>4 4gt
+noremap <leader>5 5gt
+noremap <leader>6 6gt
+noremap <leader>7 7gt
+noremap <leader>8 8gt
+noremap <leader>9 9gt
+
+
+" # Function to permanently delete views created by 'mkview'
+function! MyDeleteView()
+    let path = fnamemodify(bufname('%'),':p')
+    " vim's odd =~ escaping for /
+    let path = substitute(path, '=', '==', 'g')
+    if empty($HOME)
+    else
+        let path = substitute(path, '^'.$HOME, '\~', '')
+    endif
+    let path = substitute(path, '/', '=+', 'g') . '='
+    " view directory
+    let path = &viewdir.'/'.path
+    call delete(path)
+    echo "Deleted: ".path
+endfunction
+
+" # Command Delview (and it's abbreviation 'delview')
+command Delview call MyDeleteView()
+" Lower-case user commands: http://vim.wikia.com/wiki/Replace_a_builtin_command_using_cabbrev
+cabbrev delview <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'Delview' : 'delview')<CR>
+
+"function! DeleteFileSwaps()
+"    write
+"    let l:output = ''
+"    redir => l:output 
+"    silent exec ':sw' 
+"    redir END 
+"    let l:current_swap_file = substitute(l:output, '\n', '', '')
+"    let l:base = substitute(l:current_swap_file, '\v\.\w+$', '', '')
+"    let l:swap_files = split(glob(l:base.'\.s*'))
+"    " delete all except the current swap file
+"    for l:swap_file in l:swap_files
+"        if !empty(glob(l:swap_file)) && l:swap_file != l:current_swap_file 
+"            call delete(l:swap_file)
+"            echo "swap file removed: ".l:swap_file
+"        endif
+"    endfor
+"    " Reset swap file extension to `.swp`.
+"    set swf! | set swf!
+"    echo "Reset swap file extension for file: ".expand('%')
+"endfunction
+"command! DeleteFileSwaps :call DeleteFileSwaps()
