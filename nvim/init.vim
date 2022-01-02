@@ -279,6 +279,16 @@ endfunction
 nnoremap \\ :noh<cr>
 inoremap <Leader><Leader> <c-x><c-f>
 
+au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent execute "!chmod 700 <afile>" | endif | endif
+au BufWritePost *.sh silent execute "!chmod 744 <afile>"
+
+augroup Perl_Setup
+    autocmd!
+    autocmd BufNewFile   *  0r !vim_file_template <afile>
+    autocmd BufNewFile   *  :call search('^[ \t]*[#].*implementation[ \t]\+here')
+    " SD added this line per Conway's instructions in email from him
+    autocmd BufNewFile   *  :redraw
+augroup END
 
 
 "<<<<<<<<<<<<<<<<<< fzf >>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -387,24 +397,3 @@ command Delview call MyDeleteView()
 " Lower-case user commands: http://vim.wikia.com/wiki/Replace_a_builtin_command_using_cabbrev
 cabbrev delview <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'Delview' : 'delview')<CR>
 
-"function! DeleteFileSwaps()
-"    write
-"    let l:output = ''
-"    redir => l:output 
-"    silent exec ':sw' 
-"    redir END 
-"    let l:current_swap_file = substitute(l:output, '\n', '', '')
-"    let l:base = substitute(l:current_swap_file, '\v\.\w+$', '', '')
-"    let l:swap_files = split(glob(l:base.'\.s*'))
-"    " delete all except the current swap file
-"    for l:swap_file in l:swap_files
-"        if !empty(glob(l:swap_file)) && l:swap_file != l:current_swap_file 
-"            call delete(l:swap_file)
-"            echo "swap file removed: ".l:swap_file
-"        endif
-"    endfor
-"    " Reset swap file extension to `.swp`.
-"    set swf! | set swf!
-"    echo "Reset swap file extension for file: ".expand('%')
-"endfunction
-"command! DeleteFileSwaps :call DeleteFileSwaps()
