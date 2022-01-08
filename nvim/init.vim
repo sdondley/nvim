@@ -114,6 +114,7 @@ Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 Plug 'c9s/perlomni.vim'
 Plug 'sedm0784/vim-you-autocorrect'
 Plug 'tools-life/taskwiki', { 'branch': 'master' }
+Plug 'Raimondi/delimitMate', { 'branch': 'master' }
 "Plug 'dense-analysis/ale', { 'branch': 'master' }
 "Plug 'rhysd/vim-grammarous'
 call plug#end()
