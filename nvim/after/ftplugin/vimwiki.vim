@@ -3,6 +3,9 @@ setlocal foldenable
 setlocal foldmethod=expr
 setlocal foldexpr=VimwikiFoldLevelCustom(v:lnum)
 
+nnoremap <leader>www :silent w!<cr>:silent Vimwiki2HTML<cr>:silent !git add .<cr>:silent !git commit . -m 'update site'<cr>:silent !git push<cr>
+nnoremap <leader>wwww :w!<cr>:silent VimwikiAll2HTML<cr>:silent !git add .<cr>:silent !git commit . -m 'update site'<cr>:silent !git push<cr>
+
 
 function! MyFoldText()
     let comment = substitute(getline(v:foldstart),"^ *","",1)
@@ -38,6 +41,8 @@ nnoremap <Leader>wll ^v$F#be
 inoremap <Leader>wlb <esc>ma^wv$
 nnoremap <Leader>wlb ^/\A*\zs\a<cr>:set nohls<cr>v$F#be
 
+nmap <Leader>wlbs <leader>wlbo<right><esc>:call WebLink('i')<cr>
+
 " bullet links to outside urls
 inoremap <Leader>wlbo <esc>ma^<RIGHT><RIGHT>i[<esc>$a]()<esc>i
 nnoremap <Leader>wlbo ^<RIGHT><RIGHT>i[<esc>$a]()<esc>i
@@ -47,8 +52,11 @@ nnoremap <leader>wnt :VimwikiTabnewLink<cr>
 nnoremap <leader>wtn :VimwikiTabnewLink<cr>
 
 " get url
-inoremap <Leader>gu <esc>:call WebLink()<cr>
-nnoremap <Leader>gu a<esc>:call WebLink()<cr>
+inoremap <Leader>gh <esc>:call WebLink('h')<cr>
+nnoremap <Leader>gh a<esc>:call WebLink('h')<cr>
+
+inoremap <Leader>gu <esc>:call WebLink('u')<cr>
+nnoremap <Leader>gu a<esc>:call WebLink('u')<cr>
 
 syntax region AnnotationInner start=/==AN/ end=/N==/ containedin=Annotation conceal
 syntax region Annotation start=/\s==AN/ end=/N==\s/ oneline containedin=TaskWithAnn conceal
@@ -282,9 +290,13 @@ function! PasteTasksClean()
 endfunction
 
 " generates a link in markdown using an extern script
-function! WebLink()
+function! WebLink(type)
+    if a:type == 'i'
+        call InsertText(system('~/bin/taskwiki_helper.pl markdown_link_from_url ' . 'u'))
+        return
+    endif
     let current = getline('.')
-    call setline(line('.'), current . system('~/bin/taskwiki_helper.pl markdown_link_from_url'))
+    call setline(line('.'), current . system('~/bin/taskwiki_helper.pl markdown_link_from_url ' . a:type))
 endfunction
 
 function! OpenTerm()

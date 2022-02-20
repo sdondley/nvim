@@ -21,6 +21,41 @@ let mapleader = ';'
 set ignorecase
 set smartcase
 set timeoutlen=400
+set fo-=c
+set fo-=o
+set fo-=r
+set fo+=t
+
+autocmd FileType json syntax match Comment +\/\/.\+$+
+let g:airline_powerline_fonts = 1
+
+nnoremap <F3> :w<CR>:execute "silent !~/bin/refresh_safari quick"<CR>
+
+" testing
+nmap <buffer> <F7> :w<CR>;mk:q!;ms<CR>;mq;mr
+imap <buffer> <F7> <ESC><F7>
+"nmap <buffer> <F8> :execute "silent !tmux send-keys -t test:.left '':autoread . Enter .  'F7'" <bar>:redraw!<CR>
+"nmap <buffer> <F8> :execute "silent !tmux send-keys -t test:.left ':autoread' Enter" <bar>:redraw!<CR>
+nmap  <silent> <F8> :call SendKeys()<cr>
+"nmap <F8> :execute "silent !tmux send-keys -t test: 'F7'"<bar><CR>
+"imap <buffer> <F8> <ESC><F8>
+
+function! SendKeys()
+    let lastline = line('$')
+    let bufcontents = getline(1, lastline)
+    set shortmess=A
+    edit!
+    call setline(1, bufcontents)
+    if line('$') > lastline
+      execute lastline+1.',$:d _'
+    endif
+  :silent w!
+   execute "silent !tmux send-keys -t test:.left :e Enter"
+   sleep 1m
+   execute "silent !tmux send-keys -t test:.left e"
+   sleep 1m
+   execute "silent !tmux send-keys -t test:.left 'F7'"
+endfunction
 
 
 filetype plugin on
@@ -29,8 +64,6 @@ filetype plugin indent on
 "hi Folded ctermbg=black
 autocmd BufWritePre FileType perl  %s/\s\+$//e
 set spellfile=~/git_repos/dotfiles2/nvim/spell/en.utf-8.add
-
-
 
 " avoid annoying keypress when opening/closing terminal
 "autocmd BufWinEnter,WinEnter,  term://* startinsert
@@ -105,7 +138,7 @@ endfunction
 vnoremap <silent> <C-r> :<C-u>call Comment()<cr><cr>
 
 call plug#begin()
-Plug 'vim-syntastic/syntastic'
+"Plug 'vim-syntastic/syntastic'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'jebaum/vim-tmuxify'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -114,37 +147,68 @@ Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 Plug 'c9s/perlomni.vim'
 Plug 'sedm0784/vim-you-autocorrect'
 Plug 'tools-life/taskwiki', { 'branch': 'master' }
-Plug 'Raimondi/delimitMate', { 'branch': 'master' }
-"Plug 'dense-analysis/ale', { 'branch': 'master' }
-"Plug 'rhysd/vim-grammarous'
+"Plug 'Raimondi/delimitMate', { 'branch': 'master' }
+"Plug 'tpope/vim-surround', { 'branch': 'master' }
+"Plug 'neovim/nvim-lspconfig'
+"Plug 'neoclide/coc.nvim'
+"Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+"Plug 'glepnir/lspsaga.nvim', { 'branch': 'main' }
+"Plug 'hrsh7th/nvim-compe'
+"Plug 'mhartington/formatter.nvim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'yaegassy/coc-intelephense', {'do': 'yarn install --frozen-lockfile'}
+Plug 'windwp/nvim-autopairs'
 call plug#end()
 let g:taskwiki_markup_syntax = 'markdown'
+
+
+"lua require('lsp-config')
+"lua require('formatting')
+
+"tmuxify
+let g:tmuxify_custom_command = 'tmux split-window -h'
+let g:file_name = expand('%:p')
+let g:file = @%
+let g:tmuxify_run = { 'raku': '/Users/stevedondley/run_perl6_tests.bash ' . g:file_name . ' ' . g:file}
 
 " tmux navigator
 let g:tmux_navigator_no_mappings = 1
 let g:tmux_navigator_disable_when_zoomed = 1
-nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
-nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
-nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
-nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
+nnoremap <silent> <c-h> :up<cr>:TmuxNavigateLeft<cr>
+nnoremap <silent> <c-j> :up<cr>:TmuxNavigateDown<cr>
+nnoremap <silent> <c-k> :up<cr>:TmuxNavigateUp<cr>
+nnoremap <silent> <c-l> :up<cr>:TmuxNavigateRight<cr>
+inoremap <silent> <c-h><c-h> <esc>:w<cr>:TmuxNavigateLeft<cr>
+inoremap <silent> <c-j><c-j> <esc>:w<cr>:TmuxNavigateDown<cr>
+inoremap <silent> <c-k><c-k> <esc>:w<cr>:TmuxNavigateUp<cr>
+inoremap <silent> <c-l><c-l> <esc>:w<cr>:TmuxNavigateRight<cr>
 "nnoremap <silent> {Previous-Mapping} :TmuxNavigatePrevious<cr>
 
-"tmuxify
-let g:tmuxify_custom_command = 'tmux split-window -d'
 nnoremap <leader>so :so ~/.config/nvim/init.vim<cr>
 nnoremap <leader>sov :so ~/git_repos/dotfiles2/nvim/after/ftplugin/vimwiki.vim<cr>
 
+let delimitMate_expand_cr = 1
+let delimitMate_expand_space = 1
+nmap <leader>c' macs"'`a
+nmap <leader>c" macs'"`a
+imap <leader>c" <esc>macs'"`aa
+imap <leader>c' <esc>macs"'`aa
+inoremap <leader>imy <esc>Bimy $<esc>ea = 
 highlight Status ctermbg=darkgrey ctermfg=white
+highlight MatchParen cterm=underline ctermbg=none ctermfg=red
 set statusline=%#warningmsg#
-set statusline+=-\ %{SyntasticStatuslineFlag()}
+"set statusline+=-\ %{SyntasticStatuslineFlag()}
 set statusline+=%#Status#
 set statusline+=%=%f
 "set statusline+=%#PmenuSel#
 "set statusline+=%*
 set laststatus=2
 
+nmap <F11> :windo lcl\|ccl<CR>
 let g:syntastic_enable_perl_checker = 1
-let g:syntastic_perl_checkers = ["perl"]
+let g:syntastic_enable_raku_checker = 1
+let g:syntastic_raku_checkers = ["raku"]
+let g:syntastic_raku_lib_path = ['lib']
 let g:syntastic_perl_lib_path = ['lib']
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
@@ -203,7 +267,7 @@ inoremap <leader>' <esc>:w<cr>
 "endfunction
 
 function! RipgrepFzf(query, fullscreen, dir)
-  let command_fmt = 'rg -L --hidden --column --line-number --no-heading --color=always --smart-case %s %s | sed "s|%s||g" || true'
+    let command_fmt = 'rg -L -g "*.{md}" --hidden --column --line-number --no-heading --color=always --smart-case %s %s | sed "s|%s||g" || true'
   let initial_command = printf(command_fmt, shellescape(a:query), a:dir, a:dir)
   let reload_command = printf(command_fmt, '{q}', a:dir, a:dir)
   "let spec = {'options': ['--delimiter', ':', '--with-nth', '-1', '--preview-window', '+{2}', '--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
@@ -212,6 +276,7 @@ function! RipgrepFzf(query, fullscreen, dir)
 endfunction
 command! -nargs=* -bang RG call  RipgrepFzf(<q-args>, <bang>0, './')
 command! -nargs=* -bang RGN call RipgrepFzf(<q-args>, <bang>0, fnamemodify('~', ':p') . 'notes/')
+command! -nargs=* -bang RGC call RipgrepFzf(<q-args>, <bang>0, fnamemodify('~', ':p') . 'git_repos/websites/climate_change_chat/')
 command! -nargs=* -bang RGR call RipgrepFzf(<q-args>, <bang>0, '~/scripts/lib')
 
 " search in current directory
@@ -222,14 +287,15 @@ nnoremap <leader>rgr :RGR<cr>
 
 " search through notes directory
 nnoremap <leader>rgn :RGN<cr>
+nnoremap <leader>rc :RGC<cr>
 
  " search for tasks
 nnoremap <leader>rgt :RGT ^task '*<cr>
 
 
 " Work out whether the line has a comment then reverse that condition...
-"nnoremap <silent> # :call ToggleComment()<CR>j0
-"vmap <silent> # :call ToggleBlock()<CR>
+nnoremap <silent> # :call ToggleComment()<CR>j0
+vmap <silent> # :call ToggleBlock()<CR>
 function! ToggleComment ()
     " What's the comment character???
     let comment_char = exists('b:cmt') ? b:cmt : '#'
@@ -276,12 +342,28 @@ function! ToggleBlock () range
     endif
 endfunction
 
+function! ToggleSyntax()
+   if exists("g:syntax_on")
+      syntax off
+   else
+      syntax enable
+   endif
+endfunction
+
+nmap <silent>  <f5>  :call ToggleSyntax()<CR>
+
+augroup syntax
+    autocmd!
+    autocmd BufEnter * :syntax sync fromstart
+augroup END
+
 " turn off highlighting
 nnoremap \\ :noh<cr>
 inoremap <Leader><Leader> <c-x><c-f>
 
 au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent execute "!chmod 700 <afile>" | endif | endif
 au BufWritePost *.sh silent execute "!chmod 744 <afile>"
+au BufWritePost style.css silent execute "!~/bin/refresh_safari_osa_quick"
 
 augroup Perl_Setup
     autocmd!
@@ -290,6 +372,7 @@ augroup Perl_Setup
     " SD added this line per Conway's instructions in email from him
     autocmd BufNewFile   *  :redraw
 augroup END
+
 
 
 "<<<<<<<<<<<<<<<<<< fzf >>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -304,8 +387,30 @@ inoremap <expr> ;xf fzf#vim#complete#path('rg --files')
 
 "<<<<<<<<<<<<<<<<<< vimwiki >>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+let g:vimwiki_toc_header = 'On This Page'
+nnoremap <leader>whhh :VimwikiAll2HTML<cr>
 let g:vimwiki_folding='custom'
-let g:vimwiki_list=[{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md', 'name': 'nice'}, {'path': '~/vimwiki/steve/*', 'syntax': 'markdown', 'ext': '.md'}, {'path': '~/Documents/vimwiki/client_wikis', 'syntax': 'markdown', 'ext': '.md'}, {'path': '~/notes/', 'auto_toc': 1, 'syntax': 'markdown', 'ext': '.md', 'name': 'notes'}, ]
+let g:vimwiki_list=[
+      \ { 'path': '~/git_repos/websites/climate_change_chat/',
+      \   'auto_toc': 1,
+      \   'syntax': 'markdown',
+      \   'vimwiki_toc_header': 'On this Page',
+      \   'links_space_char': '-',
+      \   'ext': '.md',
+      \   'name': 'cccfr',
+      \   'custom_wiki2html': '~/bin/wiki2html.raku',
+      "\   'custom_wiki2html': 'vimwiki_markdown',
+      \   'template_path': '~/git_repos/websites/climate_change_chat/templates/',
+      \   'template_default': 'default',
+      \   'template_ext': '.tpl',
+      \   'html_filename_parameterization': 1,
+      \   'path_html': '~/git_repos/websites/climate_change_chat/html/',
+      \   'output_dir': '~/git_repos/websites/climate_change_chat/html/',
+      \   'css_name': 'css/style.css' },
+    \ {'path': '~/vimwiki/steve/*', 'syntax': 'markdown', 'ext': '.md'},  
+    \ {'path': '~/Documents/vimwiki/client_wikis', 'syntax': 'markdown', 'ext': '.md'}, 
+    \ {'path': '~/notes/', 'auto_toc': 1, 'syntax': 'markdown', 'ext': '.md', 'name': 'notes'}, 
+    \ {'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md', 'name': 'nice'} ]
 
 autocmd BufEnter *.txt set filetype=vimwiki
 
@@ -397,4 +502,5 @@ endfunction
 command Delview call MyDeleteView()
 " Lower-case user commands: http://vim.wikia.com/wiki/Replace_a_builtin_command_using_cabbrev
 cabbrev delview <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'Delview' : 'delview')<CR>
+
 
