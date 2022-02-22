@@ -16,6 +16,7 @@ return require('packer').startup(function()
   use 'sedm0784/vim-you-autocorrect'
   use { 'tools-life/taskwiki', branch = 'master', ft = 'markdown' }
   use { 'junegunn/fzf', cmd = 'fzf#install()' }
+  use { 'ms-jpq/coq_nvim', branch = 'coq' }
 
   use { 'ckipp01/stylua-nvim', ft = 'lua' }
 end)

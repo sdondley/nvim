@@ -70,8 +70,11 @@ time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
   fzf = {
-    loaded = true,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/fzf",
+    commands = { "fzf#install()" },
+    loaded = false,
+    needs_bufread = false,
+    only_cond = false,
+    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/fzf",
     url = "https://github.com/junegunn/fzf"
   },
   ["fzf.vim"] = {
@@ -95,18 +98,24 @@ _G.packer_plugins = {
     url = "https://github.com/wbthomason/packer.nvim"
   },
   ["perlomni.vim"] = {
-    loaded = true,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/perlomni.vim",
+    loaded = false,
+    needs_bufread = true,
+    only_cond = false,
+    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/perlomni.vim",
     url = "https://github.com/c9s/perlomni.vim"
   },
   ["stylua-nvim"] = {
-    loaded = true,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/stylua-nvim",
+    loaded = false,
+    needs_bufread = false,
+    only_cond = false,
+    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/stylua-nvim",
     url = "https://github.com/ckipp01/stylua-nvim"
   },
   taskwiki = {
-    loaded = true,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/taskwiki",
+    loaded = false,
+    needs_bufread = true,
+    only_cond = false,
+    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/taskwiki",
     url = "https://github.com/tools-life/taskwiki"
   },
   ["vim-tmux-navigator"] = {
@@ -125,13 +134,30 @@ _G.packer_plugins = {
     url = "https://github.com/sedm0784/vim-you-autocorrect"
   },
   vimwiki = {
-    loaded = true,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/vimwiki",
+    loaded = false,
+    needs_bufread = true,
+    only_cond = false,
+    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/vimwiki",
     url = "https://github.com/vimwiki/vimwiki"
   }
 }
 
 time([[Defining packer_plugins]], false)
+
+-- Command lazy-loads
+time([[Defining lazy-load commands]], true)
+pcall(vim.cmd, [[au CmdUndefined fzf#install() ++once lua require"packer.load"({'fzf'}, {}, _G.packer_plugins)]])
+time([[Defining lazy-load commands]], false)
+
+vim.cmd [[augroup packer_load_aucmds]]
+vim.cmd [[au!]]
+  -- Filetype lazy-loads
+time([[Defining lazy-load filetype autocommands]], true)
+vim.cmd [[au FileType markdown ++once lua require("packer.load")({'vimwiki', 'taskwiki'}, { ft = "markdown" }, _G.packer_plugins)]]
+vim.cmd [[au FileType perl ++once lua require("packer.load")({'perlomni.vim'}, { ft = "perl" }, _G.packer_plugins)]]
+vim.cmd [[au FileType lua ++once lua require("packer.load")({'stylua-nvim'}, { ft = "lua" }, _G.packer_plugins)]]
+time([[Defining lazy-load filetype autocommands]], false)
+vim.cmd("augroup END")
 if should_profile then save_profiles() end
 
 end)
