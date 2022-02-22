@@ -17,6 +17,9 @@ return require('packer').startup(function()
   use { 'tools-life/taskwiki', branch = 'master', ft = 'markdown' }
   use { 'junegunn/fzf', cmd = 'fzf#install()' }
   use { 'ms-jpq/coq_nvim', branch = 'coq' }
-
+  use { 'ms-jpq/coq_nvim', branch = 'coq' }
+  use { 'ms-jpq/coq.artifacts', branch = 'artifacts' }
+  use 'ray-x/lsp_signature.nvim'
   use { 'ckipp01/stylua-nvim', ft = 'lua' }
+
 end)
