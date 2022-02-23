@@ -1,3 +1,7 @@
+vim.g.mapleader = ";"
+require("plugins")
+--require('my_autopairs_cfg')
+HOME = os.getenv("HOME")
 vim.cmd[[
 source ~/.config/nvim/local_customizations.vim
 syntax on
@@ -18,7 +22,6 @@ set shiftwidth=4
 set autoindent
 set number
 set backupdir=~/.cache/nvim
-let mapleader = ';'
 set ignorecase
 set smartcase
 set timeoutlen=400
@@ -138,19 +141,6 @@ function! Comment ()
 endfunction
 vnoremap <silent> <C-r> :<C-u>call Comment()<cr><cr>
 
-call plug#begin()
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'jebaum/vim-tmuxify'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim', { 'branch': 'master' }
-Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
-Plug 'c9s/perlomni.vim'
-Plug 'sedm0784/vim-you-autocorrect'
-Plug 'tools-life/taskwiki', { 'branch': 'master' }
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'yaegassy/coc-intelephense', {'do': 'yarn install --frozen-lockfile'}
-Plug 'windwp/nvim-autopairs'
-call plug#end()
 let g:taskwiki_markup_syntax = 'markdown'
 
 
@@ -495,4 +485,5 @@ command Delview call MyDeleteView()
 " Lower-case user commands: http://vim.wikia.com/wiki/Replace_a_builtin_command_using_cabbrev
 cabbrev delview <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'Delview' : 'delview')<CR>
 ]]
+
 
