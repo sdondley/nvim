@@ -2,7 +2,78 @@ vim.g.mapleader = ";"
 vim.cmd([[
 source ~/.config/nvim/local_customizations.vim
 inoremap <leader>; <esc>%%a
+nnoremap <leader>w :w<cr>
+
+nnoremap \\ :noh<cr>
+inoremap <Leader><Leader> <c-x><c-f>
+
+"tmuxify
+let g:tmuxify_custom_command = 'tmux split-window -h'
+let g:file_name = expand('%:p')
+let g:file = @%
+let g:tmuxify_run = { 'raku': '/Users/stevedondley/run_perl6_tests.bash ' . g:file_name . ' ' . g:file}
+
+" tmux navigator
+let g:tmux_navigator_no_mappings = 1
+let g:tmux_navigator_disable_when_zoomed = 1
+nnoremap <silent> <c-h> :up<cr>:TmuxNavigateLeft<cr>
+nnoremap <silent> <c-j> :up<cr>:TmuxNavigateDown<cr>
+nnoremap <silent> <c-k> :up<cr>:TmuxNavigateUp<cr>
+nnoremap <silent> <c-l> :up<cr>:TmuxNavigateRight<cr>
+inoremap <silent> <c-h><c-h> <esc>:w<cr>:TmuxNavigateLeft<cr>
+inoremap <silent> <c-j><c-j> <esc>:w<cr>:TmuxNavigateDown<cr>
+inoremap <silent> <c-k><c-k> <esc>:w<cr>:TmuxNavigateUp<cr>
+inoremap <silent> <c-l><c-l> <esc>:w<cr>:TmuxNavigateRight<cr>
+
 "source ~/.config/nvim/plugins.vim
+
+if has('persistent_undo')
+    " Save all undo files in a single location (less messy, more risky)...
+    set undodir=$HOME/.VIM_UNDO_FILES
+
+    " Save a lot of back-history...
+    set undolevels=5000
+
+    " Actually switch on persistent undo
+    set undofile
+
+endif
+
+" jump back to last cursor position
+augroup redhat
+autocmd!
+autocmd BufReadPost *
+\ if line("'\"") > 0 && line ("'\"") <= line("$") |
+\   exe "normal! g'\"" |
+\ endif
+augroup END
+
+function! RipgrepFzf(query, fullscreen, dir)
+    let command_fmt = 'rg -L -g "*.{md}" --hidden --column --line-number --no-heading --color=always --smart-case %s %s | sed "s|%s||g" || true'
+  let initial_command = printf(command_fmt, shellescape(a:query), a:dir, a:dir)
+  let reload_command = printf(command_fmt, '{q}', a:dir, a:dir)
+  "let spec = {'options': ['--delimiter', ':', '--with-nth', '-1', '--preview-window', '+{2}', '--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  let spec = {'options': [ '--preview-window' , '~2', '--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+command! -nargs=* -bang RG call  RipgrepFzf(<q-args>, <bang>0, './')
+command! -nargs=* -bang RGN call RipgrepFzf(<q-args>, <bang>0, fnamemodify('~', ':p') . 'notes/')
+command! -nargs=* -bang RGC call RipgrepFzf(<q-args>, <bang>0, fnamemodify('~', ':p') . 'git_repos/websites/climate_change_chat/')
+command! -nargs=* -bang RGR call RipgrepFzf(<q-args>, <bang>0, '~/scripts/lib')
+
+" search in current directory
+nnoremap <leader>rgg :RG<cr>
+
+" for bastion only
+nnoremap <leader>rgr :RGR<cr>
+
+" search through notes directory
+nnoremap <leader>rgn :RGN<cr>
+nnoremap <leader>rc :RGC<cr>
+
+ " search for tasks
+nnoremap <leader>rgt :RGT ^task '*<cr>
+"autocmd CursorHold,CursorHoldI * lua require('code_action_utils').code_action_listener()
 ]])
 require("plugins")
 HOME = os.getenv("HOME")
@@ -11,7 +82,7 @@ vim.opt.ttyfast = true
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
 vim.opt.expandtab = true
-vim.opt.number = true
+vim.g.number = true
 vim.opt.autoindent = true
 vim.opt.number = true
 vim.opt.ignorecase = true
@@ -26,108 +97,29 @@ vim.opt.backupdir = HOME .. "/.cache/nvim"
 vim.opt.timeoutlen = 500
 vim.g.complete = ".,w,b,u.t"
 
+
+require('my_autopairs_cfg')
 require("mylspconfig")
-require("nvim-autopairs").setup({
-	fast_wrap = {
-		map = "<leader>e",
-		--chars = { '{', '[', '(', '"', "'" },
-		--pattern = string.gsub([[ [%'%"%)%>%]%)%}%,] ]], '%s+', ''),
-		--offset = 0, -- Offset from pattern match
-		--end_key = '$',
-		--keys = 'qwertyuiopzxcvbnmasdfghjkl',
-		--check_comma = true,
-		--highlight = 'Search',
-		--highlight_grey='Comment'
-	},
-})
-cfg = {
-	debug = false, -- set to true to enable debug logging
-	log_path = vim.fn.stdpath("cache") .. "/lsp_signature.log", -- log dir when debug is on
-	-- default is  ~/.cache/nvim/lsp_signature.log
-	verbose = false, -- show debug line number
-
-	bind = true, -- This is mandatory, otherwise border config won't get registered.
-	-- If you want to hook lspsaga or other signature handler, pls set to false
-	doc_lines = 10, -- will show two lines of comment/doc(if there are more than two lines in doc, will be truncated);
-	-- set to 0 if you DO NOT want any API comments be shown
-	-- This setting only take effect in insert mode, it does not affect signature help in normal
-	-- mode, 10 by default
-
-	floating_window = true, -- show hint in a floating window, set to false for virtual text only mode
-
-	floating_window_above_cur_line = true, -- try to place the floating above the current line when possible Note:
-	-- will set to true when fully tested, set to false will use whichever side has more space
-	-- this setting will be helpful if you do not want the PUM and floating win overlap
-
-	floating_window_off_x = 1, -- adjust float windows x position.
-	floating_window_off_y = 1, -- adjust float windows y position.
-
-	fix_pos = false, -- set to true, the floating window will not auto-close until finish all parameters
-	hint_enable = true, -- virtual hint enable
-	hint_prefix = "🐼 ", -- Panda for parameter
-	hint_scheme = "String",
-	hi_parameter = "LspSignatureActiveParameter", -- how your parameter will be highlight
-	max_height = 12, -- max height of signature floating_window, if content is more than max_height, you can scroll down
-	-- to view the hiding contents
-	max_width = 80, -- max_width of signature floating_window, line will be wrapped if exceed max_width
-	handler_opts = {
-		border = "rounded",   -- double, rounded, single, shadow, none
-	},
-
-	always_trigger = false, -- sometime show signature on new line or in middle of parameter can be confusing, set it to false for #58
-
-	auto_close_after = nil, -- autoclose signature float win after x sec, disabled if nil.
-	extra_trigger_chars = {}, -- Array of extra characters that will trigger signature completion, e.g., {"(", ","}
-	zindex = 200, -- by default it will be on top of all floating windows, set to <= 50 send it to bottom
-
-	padding = "", -- character to pad on left and right of signature can be ' ', or '|'  etc
-
-	transparency = nil, -- disabled by default, allow floating win transparent value 1~100
-	shadow_blend = 36, -- if you using shadow as border use this set the opacity
-	shadow_guibg = "Black", -- if you using shadow as border use this set the color e.g. 'Green' or '#121315'
-	timer_interval = 200, -- default timer check interval set to lower value if you want to reduce latency
-	toggle_key = nil, -- toggle signature on and off in insert mode,  e.g. toggle_key = '<M-x>'
-}
+require('my_lspsignature_cfg' )
 require("lsp_signature").setup(cfg)
 
--- autopair with COQ
-local remap = vim.api.nvim_set_keymap
-local npairs = require("nvim-autopairs")
+--vim.cmd [[autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()]]
 
-npairs.setup({ map_bs = false, map_cr = false })
-
-vim.g.coq_settings = {
-	keymap = { recommended = false },
-	auto_start = "shut-up",
-}
-
--- these mappings are coq recommended mappings unrelated to nvim-autopairs
-remap("i", "<esc>", [[pumvisible() ? "<c-e><esc>" : "<esc>"]], { expr = true, noremap = true })
-remap("i", "<c-c>", [[pumvisible() ? "<c-e><c-c>" : "<c-c>"]], { expr = true, noremap = true })
-remap("i", "<tab>", [[pumvisible() ? "<c-n>" : "<tab>"]], { expr = true, noremap = true })
-remap("i", "<s-tab>", [[pumvisible() ? "<c-p>" : "<bs>"]], { expr = true, noremap = true })
-
--- skip it, if you use another global object
-_G.MUtils = {}
-
-MUtils.CR = function()
-	if vim.fn.pumvisible() ~= 0 then
-		if vim.fn.complete_info({ "selected" }).selected ~= -1 then
-			return npairs.esc("<c-y>")
-		else
-			return npairs.esc("<c-e>") .. npairs.autopairs_cr()
-		end
-	else
-		return npairs.autopairs_cr()
-	end
-end
-remap("i", "<cr>", "v:lua.MUtils.CR()", { expr = true, noremap = true })
-
-MUtils.BS = function()
-	if vim.fn.pumvisible() ~= 0 and vim.fn.complete_info({ "mode" }).mode == "eval" then
-		return npairs.esc("<c-e>") .. npairs.autopairs_bs()
-	else
-		return npairs.autopairs_bs()
-	end
-end
-remap("i", "<bs>", "v:lua.MUtils.BS()", { expr = true, noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>xx", "<cmd>Trouble<cr>",
+  {silent = true, noremap = true}
+)
+vim.api.nvim_set_keymap("n", "<leader>xw", "<cmd>Trouble workspace_diagnostics<cr>",
+  {silent = true, noremap = true}
+)
+vim.api.nvim_set_keymap("n", "<leader>xd", "<cmd>Trouble document_diagnostics<cr>",
+  {silent = true, noremap = true}
+)
+vim.api.nvim_set_keymap("n", "<leader>xl", "<cmd>Trouble loclist<cr>",
+  {silent = true, noremap = true}
+)
+vim.api.nvim_set_keymap("n", "<leader>xq", "<cmd>Trouble quickfix<cr>",
+  {silent = true, noremap = true}
+)
+vim.api.nvim_set_keymap("n", "gR", "<cmd>Trouble lsp_references<cr>",
+  {silent = true, noremap = true}
+)

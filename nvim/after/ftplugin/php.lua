@@ -18,4 +18,9 @@ highlight PmenuSel guibg=#111111 guifg=white
 
 set completeopt = "menu,menuone,preview"
 
+let b:match_words .= '<?php:[^-]>'
+set matchpairs-=<:>
+let b:match_words = substitute(b:match_words, '<:>', '<:\@<=[^-]>', '')
+
+highlight Folded guibg=#222222
 ]]

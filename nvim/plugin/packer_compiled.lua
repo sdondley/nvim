@@ -69,6 +69,16 @@ end
 time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
+  ["coq.artifacts"] = {
+    loaded = true,
+    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/coq.artifacts",
+    url = "https://github.com/ms-jpq/coq.artifacts"
+  },
+  coq_nvim = {
+    loaded = true,
+    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/coq_nvim",
+    url = "https://github.com/ms-jpq/coq_nvim"
+  },
   fzf = {
     commands = { "fzf#install()" },
     loaded = false,
@@ -82,6 +92,11 @@ _G.packer_plugins = {
     path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/fzf.vim",
     url = "https://github.com/junegunn/fzf.vim"
   },
+  ["lsp_signature.nvim"] = {
+    loaded = true,
+    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/lsp_signature.nvim",
+    url = "https://github.com/ray-x/lsp_signature.nvim"
+  },
   ["nvim-autopairs"] = {
     loaded = true,
     path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/nvim-autopairs",
@@ -91,6 +106,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/nvim-lspconfig",
     url = "https://github.com/neovim/nvim-lspconfig"
+  },
+  ["nvim-web-devicons"] = {
+    loaded = true,
+    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/nvim-web-devicons",
+    url = "https://github.com/kyazdani42/nvim-web-devicons"
   },
   ["packer.nvim"] = {
     loaded = true,
@@ -103,6 +123,11 @@ _G.packer_plugins = {
     only_cond = false,
     path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/perlomni.vim",
     url = "https://github.com/c9s/perlomni.vim"
+  },
+  ["phpfolding.vim"] = {
+    loaded = true,
+    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/phpfolding.vim",
+    url = "https://github.com/rayburgemeestre/phpfolding.vim"
   },
   ["stylua-nvim"] = {
     loaded = false,
@@ -117,6 +142,17 @@ _G.packer_plugins = {
     only_cond = false,
     path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/taskwiki",
     url = "https://github.com/tools-life/taskwiki"
+  },
+  ["trouble.nvim"] = {
+    config = { "\27LJ\2\n9\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\ftrouble\frequire\0" },
+    loaded = true,
+    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/trouble.nvim",
+    url = "https://github.com/folke/trouble.nvim"
+  },
+  ["vim-easy-align"] = {
+    loaded = true,
+    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/vim-easy-align",
+    url = "https://github.com/junegunn/vim-easy-align"
   },
   ["vim-tmux-navigator"] = {
     loaded = true,
@@ -143,6 +179,10 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
+-- Config for: trouble.nvim
+time([[Config for trouble.nvim]], true)
+try_loadstring("\27LJ\2\n9\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\ftrouble\frequire\0", "config", "trouble.nvim")
+time([[Config for trouble.nvim]], false)
 
 -- Command lazy-loads
 time([[Defining lazy-load commands]], true)
@@ -153,7 +193,7 @@ vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
 time([[Defining lazy-load filetype autocommands]], true)
-vim.cmd [[au FileType markdown ++once lua require("packer.load")({'vimwiki', 'taskwiki'}, { ft = "markdown" }, _G.packer_plugins)]]
+vim.cmd [[au FileType markdown ++once lua require("packer.load")({'taskwiki', 'vimwiki'}, { ft = "markdown" }, _G.packer_plugins)]]
 vim.cmd [[au FileType perl ++once lua require("packer.load")({'perlomni.vim'}, { ft = "perl" }, _G.packer_plugins)]]
 vim.cmd [[au FileType lua ++once lua require("packer.load")({'stylua-nvim'}, { ft = "lua" }, _G.packer_plugins)]]
 time([[Defining lazy-load filetype autocommands]], false)
