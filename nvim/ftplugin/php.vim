@@ -1,4 +1,4 @@
-lua require('nvim-autopairs').setup{}
+"lua require('nvim-autopairs').setup{}
 
 set signcolumn=number
 
@@ -73,3 +73,6 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 nmap <silent> ga <Plug>(coc-codeaction-line)
+
+highlight Folded guibg=#222222
+
