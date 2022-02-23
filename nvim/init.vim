@@ -138,7 +138,6 @@ endfunction
 vnoremap <silent> <C-r> :<C-u>call Comment()<cr><cr>
 
 call plug#begin()
-"Plug 'vim-syntastic/syntastic'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'jebaum/vim-tmuxify'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -147,14 +146,6 @@ Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 Plug 'c9s/perlomni.vim'
 Plug 'sedm0784/vim-you-autocorrect'
 Plug 'tools-life/taskwiki', { 'branch': 'master' }
-"Plug 'Raimondi/delimitMate', { 'branch': 'master' }
-"Plug 'tpope/vim-surround', { 'branch': 'master' }
-"Plug 'neovim/nvim-lspconfig'
-"Plug 'neoclide/coc.nvim'
-"Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-"Plug 'glepnir/lspsaga.nvim', { 'branch': 'main' }
-"Plug 'hrsh7th/nvim-compe'
-"Plug 'mhartington/formatter.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'yaegassy/coc-intelephense', {'do': 'yarn install --frozen-lockfile'}
 Plug 'windwp/nvim-autopairs'
