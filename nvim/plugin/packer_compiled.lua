@@ -120,7 +120,7 @@ _G.packer_plugins = {
     url = "https://github.com/ray-x/lsp_signature.nvim"
   },
   ["nvim-autopairs"] = {
-    config = { "\27LJ\2\n@\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\19nvim-autopairs\frequire\0" },
+    config = { "\27LJ\2\n0\0\0\3\0\2\0\0046\0\0\0'\2\1\0B\0\2\1K\0\1\0\21my_autopairs_cfg\frequire\0" },
     loaded = false,
     needs_bufread = false,
     only_cond = false,
@@ -224,15 +224,15 @@ _G.packer_plugins = {
 
 time([[Defining packer_plugins]], false)
 -- Conditional loads
-time([[Conditional loading of vim-tmux-navigator]], true)
-  require("packer.load")({"vim-tmux-navigator"}, {}, _G.packer_plugins)
-time([[Conditional loading of vim-tmux-navigator]], false)
 time([[Conditional loading of fzf.vim]], true)
   require("packer.load")({"fzf.vim"}, {}, _G.packer_plugins)
 time([[Conditional loading of fzf.vim]], false)
 time([[Conditional loading of vim-tmuxify]], true)
   require("packer.load")({"vim-tmuxify"}, {}, _G.packer_plugins)
 time([[Conditional loading of vim-tmuxify]], false)
+time([[Conditional loading of vim-tmux-navigator]], true)
+  require("packer.load")({"vim-tmux-navigator"}, {}, _G.packer_plugins)
+time([[Conditional loading of vim-tmux-navigator]], false)
 
 -- Command lazy-loads
 time([[Defining lazy-load commands]], true)
@@ -243,10 +243,10 @@ vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
 time([[Defining lazy-load filetype autocommands]], true)
-vim.cmd [[au FileType php ++once lua require("packer.load")({'nvim-autopairs', 'coc-intelephense', 'coc.nvim', 'phpfolding.vim', 'vim-easy-align', 'lsp_signature.nvim'}, { ft = "php" }, _G.packer_plugins)]]
-vim.cmd [[au FileType markdown ++once lua require("packer.load")({'taskwiki', 'vimwiki'}, { ft = "markdown" }, _G.packer_plugins)]]
-vim.cmd [[au FileType perl ++once lua require("packer.load")({'nvim-autopairs', 'perlomni.vim', 'vim-easy-align'}, { ft = "perl" }, _G.packer_plugins)]]
 vim.cmd [[au FileType lua ++once lua require("packer.load")({'stylua-nvim'}, { ft = "lua" }, _G.packer_plugins)]]
+vim.cmd [[au FileType php ++once lua require("packer.load")({'coc.nvim', 'phpfolding.vim', 'lsp_signature.nvim', 'nvim-autopairs', 'coc-intelephense', 'vim-easy-align'}, { ft = "php" }, _G.packer_plugins)]]
+vim.cmd [[au FileType markdown ++once lua require("packer.load")({'taskwiki', 'vimwiki'}, { ft = "markdown" }, _G.packer_plugins)]]
+vim.cmd [[au FileType perl ++once lua require("packer.load")({'perlomni.vim', 'nvim-autopairs', 'vim-easy-align'}, { ft = "perl" }, _G.packer_plugins)]]
 time([[Defining lazy-load filetype autocommands]], false)
 vim.cmd("augroup END")
 if should_profile then save_profiles() end
