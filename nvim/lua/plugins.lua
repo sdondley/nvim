@@ -21,7 +21,7 @@ return require('packer').startup(function()
     { 'tools-life/taskwiki', 		    opt = true, ft = 'markdown', branch = 'master' },
     { 'ms-jpq/coq_nvim', 		        opt = true, branch = 'coq', },
     { 'ms-jpq/coq.artifacts',  		    opt = true, branch = 'artifacts' },
-    { 'neoclide/coc.nvim', 		        opt = true, ft = {'php'}, branch = 'master', run = 'yarn install --frozen-lockfile' },
+    { 'neoclide/coc.nvim', 		        opt = true, ft = {'php'}, branch = 'master' },
     { 'yaegassy/coc-intelephense',  	opt = true, ft = {'php'}, run = 'yarn install --frozen-lockfile'},
     { 'ray-x/lsp_signature.nvim', 	    opt = true, ft = {'php'} },
     { 'junegunn/vim-easy-align', 	    opt = true, ft = {'php', 'perl'} },
