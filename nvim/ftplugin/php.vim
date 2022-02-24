@@ -74,3 +74,48 @@ nmap <silent> ga <Plug>(coc-codeaction-line)
 
 highlight Folded guibg=#222222
 
+nnoremap <expr> s Surround(nr2char(getchar()))
+nnoremap <expr> sr SurroundRemove()
+
+function! Surround(character)
+    if (a:character == '(')
+		let close = ')'
+	elseif (a:character == '[')
+		let close = ']'
+	elseif (a:character == '<')
+		let close = '>'
+	elseif (a:character == '{')
+		let close = '}'
+	elseif (a:character == '')
+		let close = ''
+	elseif (a:character == '“')
+		let close = '”'
+	elseif (a:character == '‘')
+		let close = '’'
+	else
+		let close = a:character
+	endif
+	return 'mabi' . a:character . 'ea' . close . '`al'
+endfunc
+
+
+function! Surround(character)
+    if (a:character == '(')
+		let close = ')'
+	elseif (a:character == '[')
+		let close = ']'
+	elseif (a:character == '<')
+		let close = '>'
+	elseif (a:character == '{')
+		let close = '}'
+	elseif (a:character == '')
+		let close = ''
+	elseif (a:character == '“')
+		let close = '”'
+	elseif (a:character == '‘')
+		let close = '’'
+	else
+		let close = a:character
+	endif
+	return 'mabi' . a:character . 'ea' . close . '`al'
+endfunc
