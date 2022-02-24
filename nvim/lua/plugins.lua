@@ -3,43 +3,39 @@
 -- Only required if you have packer configured as `opt`
 -- vim.cmd [[packadd packer.nvim]]
 
+vim.cmd [[packadd packer.nvim]]
+
 return require('packer').startup(function()
-  -- Packer can manage itself
-  use 'wbthomason/packer.nvim'
-  use 'christoomey/vim-tmux-navigator'
-  use 'jebaum/vim-tmuxify'
-  use { 'c9s/perlomni.vim', ft = "perl" }
-  use 'windwp/nvim-autopairs'
-  use 'neovim/nvim-lspconfig'
-  use { 'vimwiki/vimwiki', branch = 'dev', ft = 'markdown' }
-  use { 'junegunn/fzf', cmd = 'fzf#install()' }
-  use { 'junegunn/fzf.vim', branch = 'master' }
-  use 'sedm0784/vim-you-autocorrect'
-  use { 'tools-life/taskwiki', branch = 'master', ft = 'markdown' }
-
-  use { 'ms-jpq/coq_nvim', branch = 'coq' }
-  use { 'ms-jpq/coq.artifacts', branch = 'artifacts' }
-  
-  use { 'neoclide/coc.nvim', branch = 'master', run = 'yarn install --frozen-lockfile'}
-  use { 'yaegassy/coc-intelephense', run = 'yarn install --frozen-lockfile'}
-
-
-  -- for display function signatures
-  use 'ray-x/lsp_signature.nvim'
-  use 'junegunn/vim-easy-align'
-  use { 'ckipp01/stylua-nvim', ft = 'lua' }
-  use 'rayburgemeestre/phpfolding.vim'
-
+  tmux = os.getenv("TMUX") and true or false
   use {
-  "folke/trouble.nvim",
-  requires = "kyazdani42/nvim-web-devicons",
-  config = function()
-    require("trouble").setup {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
+    { 'wbthomason/packer.nvim',		    opt = true },
+    { 'christoomey/vim-tmux-navigator', opt = true, cond = true },
+    { 'jebaum/vim-tmuxify', 		    opt = true, cond = true },
+    { 'c9s/perlomni.vim', 		        opt = true, ft = {"perl"} },
+    { 'windwp/nvim-autopairs', 		    opt = true, ft = {'php', 'perl'}, config = function() require('my_autopairs_cfg') end },
+    { 'neovim/nvim-lspconfig', 		    opt = true, },
+    { 'vimwiki/vimwiki', 		        opt = true, ft = 'markdown', branch = 'dev' },
+    { 'junegunn/fzf', 			        opt = true, cond = true, cmd = 'fzf#install()' },
+    { 'junegunn/fzf.vim', 		        opt = true, cond = true, branch = 'master', },
+    { 'sedm0784/vim-you-autocorrect', 	opt = true },
+    { 'tools-life/taskwiki', 		    opt = true, ft = 'markdown', branch = 'master' },
+    { 'ms-jpq/coq_nvim', 		        opt = true, branch = 'coq', },
+    { 'ms-jpq/coq.artifacts',  		    opt = true, branch = 'artifacts' },
+    { 'neoclide/coc.nvim', 		        opt = true, ft = {'php'}, branch = 'master', run = 'yarn install --frozen-lockfile' },
+    { 'yaegassy/coc-intelephense',  	opt = true, ft = {'php'}, run = 'yarn install --frozen-lockfile'},
+    { 'ray-x/lsp_signature.nvim', 	    opt = true, ft = {'php'} },
+    { 'junegunn/vim-easy-align', 	    opt = true, ft = {'php', 'perl'} },
+    { 'ckipp01/stylua-nvim', 		    opt = true, ft = {'lua'} },
+    { 'rayburgemeestre/phpfolding.vim', opt = true, ft = {'php'} },
+    { "folke/trouble.nvim", 		    opt = true, requires = "kyazdani42/nvim-web-devicons",
+      config = function()
+        require("trouble").setup {
+          -- your configuration comes here
+          -- or leave it empty to use the default settings
+          -- refer to the configuration section below
+	}
+	end
     }
-  end
 }
-
 end)
+

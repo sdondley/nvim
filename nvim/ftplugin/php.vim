@@ -1,5 +1,3 @@
-"lua require('nvim-autopairs').setup{}
-
 set signcolumn=number
 
 if (has("nvim"))

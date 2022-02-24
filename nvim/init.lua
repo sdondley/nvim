@@ -1,8 +1,7 @@
 vim.g.mapleader = ";"
-require("plugins")
-require('my_autopairs_cfg')
-require('my_lspsignature_cfg' )
-require("lsp_signature").setup(cfg)
+require('plugins')
+--require('my_lspsignature_cfg' )
+--require("lsp_signature").setup(cfg)
 HOME = os.getenv("HOME")
 vim.cmd[[
 source ~/.config/nvim/local_customizations.vim

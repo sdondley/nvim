@@ -1,4 +1,5 @@
 require("nvim-autopairs").setup({
+    kd
 	fast_wrap = {
 		map = "<leader>e",
 		--chars = { '{', '[', '(', '"', "'" },
