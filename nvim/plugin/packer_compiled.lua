@@ -76,10 +76,10 @@ _G.packer_plugins = {
     url = "https://github.com/ray-x/lsp_signature.nvim"
   },
   ["nvim-lspconfig"] = {
-    cond = { true },
+    config = { "\27LJ\2\n1\0\0\3\0\2\0\0046\0\0\0'\2\1\0B\0\2\1K\0\1\0\22lsp_config_packer\frequire\0" },
     loaded = false,
     needs_bufread = false,
-    only_cond = true,
+    only_cond = false,
     path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/nvim-lspconfig",
     url = "https://github.com/neovim/nvim-lspconfig"
   },
@@ -104,12 +104,16 @@ time([[Config for lsp_signature.nvim]], true)
 try_loadstring("\27LJ\2\nC\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0006\2\3\0B\0\2\1K\0\1\0\bcfg\nsetup\18lsp_signature\frequire\0", "config", "lsp_signature.nvim")
 time([[Config for lsp_signature.nvim]], false)
 -- Conditional loads
-time([[Conditional loading of nvim-lspconfig]], true)
-  require("packer.load")({"nvim-lspconfig"}, {}, _G.packer_plugins)
-time([[Conditional loading of nvim-lspconfig]], false)
 time([[Conditional loading of vim-tmux-navigator]], true)
   require("packer.load")({"vim-tmux-navigator"}, {}, _G.packer_plugins)
 time([[Conditional loading of vim-tmux-navigator]], false)
+vim.cmd [[augroup packer_load_aucmds]]
+vim.cmd [[au!]]
+  -- Filetype lazy-loads
+time([[Defining lazy-load filetype autocommands]], true)
+vim.cmd [[au FileType php ++once lua require("packer.load")({'nvim-lspconfig'}, { ft = "php" }, _G.packer_plugins)]]
+time([[Defining lazy-load filetype autocommands]], false)
+vim.cmd("augroup END")
 if should_profile then save_profiles() end
 
 end)
