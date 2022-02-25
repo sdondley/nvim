@@ -46,3 +46,5 @@ lsp_sig_cfg = {
 	timer_interval = 200, -- default timer check interval set to lower value if you want to reduce latency
 	toggle_key = nil, -- toggle signature on and off in insert mode,  e.g. toggle_key = '<M-x>'
 }
+
+require "lsp_signature".setup(lsp_sig_cfg)

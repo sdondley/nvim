@@ -1,7 +1,5 @@
 vim.g.mapleader = ";"
 require('plugins')
---require('my_lspsignature_cfg' )
---require("lsp_signature").setup(cfg)
 HOME = os.getenv("HOME")
 vim.cmd[[
 source ~/.config/nvim/local_customizations.vim
@@ -30,6 +28,8 @@ set fo-=c
 set fo-=o
 set fo-=r
 set fo+=t
+
+nnoremap <leader><leader> :w<cr>
 
 autocmd FileType json syntax match Comment +\/\/.\+$+
 let g:airline_powerline_fonts = 1
@@ -94,6 +94,7 @@ set spellfile=~/git_repos/dotfiles2/nvim/spell/en.utf-8.add
 "set mouse=a		" Enable mouse usage (all modes)
 
 iab <l <lt>leader>
+
 
 nnoremap ;tn :tabnew<space>
 
@@ -234,7 +235,6 @@ inoremap <expr> <leader>f fzf#vim#complete#path('rg --files')
 
 " original function
 
-nnoremap <leader><leader> :w<cr>
 
 
 "original command and function

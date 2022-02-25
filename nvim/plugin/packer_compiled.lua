@@ -96,15 +96,16 @@ _G.packer_plugins = {
     url = "https://github.com/ms-jpq/coq_nvim"
   },
   fzf = {
-    commands = { "fzf#install()" },
-    cond = { true },
+    load_after = {
+      ["fzf.vim"] = true
+    },
     loaded = false,
     needs_bufread = false,
-    only_cond = false,
     path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/fzf",
     url = "https://github.com/junegunn/fzf"
   },
   ["fzf.vim"] = {
+    after = { "fzf" },
     cond = { true },
     loaded = false,
     needs_bufread = false,
@@ -113,6 +114,7 @@ _G.packer_plugins = {
     url = "https://github.com/junegunn/fzf.vim"
   },
   ["lsp_signature.nvim"] = {
+    config = { "\27LJ\2\n0\0\0\3\0\2\0\0046\0\0\0'\2\1\0B\0\2\1K\0\1\0\21lspsignature_cfg\frequire\0" },
     loaded = false,
     needs_bufread = false,
     only_cond = false,
@@ -120,7 +122,7 @@ _G.packer_plugins = {
     url = "https://github.com/ray-x/lsp_signature.nvim"
   },
   ["nvim-autopairs"] = {
-    config = { "\27LJ\2\n0\0\0\3\0\2\0\0046\0\0\0'\2\1\0B\0\2\1K\0\1\0\21my_autopairs_cfg\frequire\0" },
+    config = { "\27LJ\2\n-\0\0\3\0\2\0\0046\0\0\0'\2\1\0B\0\2\1K\0\1\0\18autopairs_cfg\frequire\0" },
     loaded = false,
     needs_bufread = false,
     only_cond = false,
@@ -128,8 +130,10 @@ _G.packer_plugins = {
     url = "https://github.com/windwp/nvim-autopairs"
   },
   ["nvim-lspconfig"] = {
+    cond = { true },
     loaded = false,
     needs_bufread = false,
+    only_cond = true,
     path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/nvim-lspconfig",
     url = "https://github.com/neovim/nvim-lspconfig"
   },
@@ -224,6 +228,9 @@ _G.packer_plugins = {
 
 time([[Defining packer_plugins]], false)
 -- Conditional loads
+time([[Conditional loading of nvim-lspconfig]], true)
+  require("packer.load")({"nvim-lspconfig"}, {}, _G.packer_plugins)
+time([[Conditional loading of nvim-lspconfig]], false)
 time([[Conditional loading of vim-tmux-navigator]], true)
   require("packer.load")({"vim-tmux-navigator"}, {}, _G.packer_plugins)
 time([[Conditional loading of vim-tmux-navigator]], false)
@@ -233,20 +240,14 @@ time([[Conditional loading of vim-tmuxify]], false)
 time([[Conditional loading of fzf.vim]], true)
   require("packer.load")({"fzf.vim"}, {}, _G.packer_plugins)
 time([[Conditional loading of fzf.vim]], false)
-
--- Command lazy-loads
-time([[Defining lazy-load commands]], true)
-pcall(vim.cmd, [[au CmdUndefined fzf#install() ++once lua require"packer.load"({'fzf'}, {}, _G.packer_plugins)]])
-time([[Defining lazy-load commands]], false)
-
 vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
 time([[Defining lazy-load filetype autocommands]], true)
-vim.cmd [[au FileType lua ++once lua require("packer.load")({'stylua-nvim'}, { ft = "lua" }, _G.packer_plugins)]]
-vim.cmd [[au FileType php ++once lua require("packer.load")({'lsp_signature.nvim', 'nvim-autopairs', 'coc-intelephense', 'coc.nvim', 'phpfolding.vim', 'vim-easy-align'}, { ft = "php" }, _G.packer_plugins)]]
-vim.cmd [[au FileType markdown ++once lua require("packer.load")({'vimwiki', 'taskwiki'}, { ft = "markdown" }, _G.packer_plugins)]]
 vim.cmd [[au FileType perl ++once lua require("packer.load")({'nvim-autopairs', 'perlomni.vim', 'vim-easy-align'}, { ft = "perl" }, _G.packer_plugins)]]
+vim.cmd [[au FileType markdown ++once lua require("packer.load")({'taskwiki', 'vimwiki'}, { ft = "markdown" }, _G.packer_plugins)]]
+vim.cmd [[au FileType lua ++once lua require("packer.load")({'stylua-nvim'}, { ft = "lua" }, _G.packer_plugins)]]
+vim.cmd [[au FileType php ++once lua require("packer.load")({'nvim-autopairs', 'coc-intelephense', 'coc.nvim', 'vim-easy-align', 'phpfolding.vim', 'lsp_signature.nvim'}, { ft = "php" }, _G.packer_plugins)]]
 time([[Defining lazy-load filetype autocommands]], false)
 vim.cmd("augroup END")
 if should_profile then save_profiles() end
