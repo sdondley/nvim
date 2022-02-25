@@ -12,7 +12,7 @@ return require('packer').startup(function()
     { 'christoomey/vim-tmux-navigator', opt = true, cond = true },
     { 'jebaum/vim-tmuxify', 		    opt = true, cond = true },
     { 'c9s/perlomni.vim', 		        opt = true, ft = {"perl"} },
-    { 'windwp/nvim-autopairs', 		    opt = true, ft = {'php', 'perl'}, config = function() require('my_autopairs_cfg') end },
+    { 'windwp/nvim-autopairs', 		    opt = true, ft = {'php', 'perl'}, config = function() require('autopairs_cfg') end },
     { 'neovim/nvim-lspconfig', 		    opt = true, },
     { 'vimwiki/vimwiki', 		        opt = true, ft = 'markdown', branch = 'dev' },
     { 'junegunn/fzf', 			        opt = true, cond = true, cmd = 'fzf#install()' },
