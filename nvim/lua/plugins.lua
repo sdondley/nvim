@@ -8,7 +8,7 @@ vim.cmd [[packadd packer.nvim]]
 return require('packer').startup(function()
   tmux = os.getenv("TMUX") and true or false
   use {
-    { 'wbthomason/packer.nvim',		    opt = true },
+    { 'wbthomason/packer.nvim',		    opt = false },
     { 'christoomey/vim-tmux-navigator',	    opt = true, cond = true },
     { 'jebaum/vim-tmuxify', 		    opt = true, cond = true },
     { 'c9s/perlomni.vim', 		    opt = true, ft = {"perl"} },
@@ -20,8 +20,8 @@ return require('packer').startup(function()
     { 'sedm0784/vim-you-autocorrect', 	    opt = true },
     { 'tools-life/taskwiki', 		    opt = true, ft = 'markdown', branch = 'master' },
     { 'ms-jpq/coq_nvim', 		    opt = true, branch = 'coq', },
+    { 'neoclide/coc.nvim', 		    opt = true, ft = {'php'}, branch = 'release' },
     { 'ms-jpq/coq.artifacts',  		    opt = true, branch = 'artifacts' },
-    { 'neoclide/coc.nvim', 		    opt = true, ft = {'php'}, branch = 'master' },
     { 'yaegassy/coc-intelephense',  	    opt = true, ft = {'php'}, run = 'yarn install --frozen-lockfile'},
     { 'ray-x/lsp_signature.nvim', 	    opt = false, ft = {'php'}, config = function() require('lspsignature_cfg') end },
     { 'junegunn/vim-easy-align', 	    opt = true, ft = {'php', 'perl'} },
