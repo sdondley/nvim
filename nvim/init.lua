@@ -235,7 +235,6 @@ inoremap <expr> <leader>f fzf#vim#complete#path('rg --files')
 " original function
 
 nnoremap <leader><leader> :w<cr>
-inoremap <leader>' <esc>:w<cr>
 
 
 "original command and function
