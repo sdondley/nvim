@@ -2,9 +2,8 @@
 vim.cmd[[
 syntax enable
 syntax on
-packadd packer.nvim
 set clipboard=unnamed 
-filetype plugin indent on
+"filetype plugin indent on
 function! Exec(cmd)
 	redir @a
 		exec printf('silent %s',a:cmd)
@@ -21,18 +20,7 @@ set termguicolors
 ]]
 
 -- set up plugins
-local util = require 'packer.util'
-require('packer').startup({function()
-	use 'wbthomason/packer.nvim'
-	use { 'christoomey/vim-tmux-navigator', opt = false }
-	use { 'rayburgemeestre/phpfolding.vim', ft = { 'php' } }
-	use { 'neoclide/coc.nvim', branch = 'release', ft = { 'php' } }
-end,
-config = {
-	opt_default = true,
-	compile_path = util.join_paths(vim.fn.stdpath('config'), 'compiled_packer_config', 'packer_compiled.lua'),
-	auto_clean = false
-}})
+require'plugins'
 
 -- set up tmux nav
 require'tmux_nav_vim_cfg'
