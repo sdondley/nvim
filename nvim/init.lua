@@ -13,7 +13,6 @@ set cpt=.,w,b,u,t
 set softtabstop=4
 set shiftwidth=4
 set autoindent
-set number
 set backupdir=~/.cache/nvim
 set ignorecase
 set smartcase
