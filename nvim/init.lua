@@ -14,6 +14,10 @@ function! Exec(cmd)
 endfunction
 cnoremap <C-P> <Up>
 cnoremap <C-N> <Down>
+if (has("nvim"))
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
+set termguicolors
 ]]
 
 -- set up plugins
