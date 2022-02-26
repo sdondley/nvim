@@ -1,5 +1,7 @@
 -- these are essential settings for all vim configs
 vim.cmd[[
+syntax enable
+syntax on
 packadd packer.nvim
 set clipboard=unnamed 
 filetype plugin on
@@ -10,8 +12,6 @@ function! Exec(cmd)
 	tabnew
 	norm "ap
 endfunction
-syntax enable
-syntax on
 cnoremap <C-P> <Up>
 cnoremap <C-N> <Down>
 ]]
