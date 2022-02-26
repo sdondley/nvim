@@ -1,23 +1,49 @@
 -- these are essential settings for all vim configs
 vim.cmd[[
 packadd packer.nvim
+filetype plugin indent on
+set mouse=a
 set clipboard=unnamed 
+set background=dark
+set tabstop=4
+set hlsearch
+set incsearch
+set expandtab
+set number
+set cpt=.,w,b,u,t
+set softtabstop=4
+set shiftwidth=4
+set autoindent
+set backupdir=~/.cache/nvim
+set ignorecase
+set smartcase
+set timeoutlen=400
+set fo-=c
+set fo-=o
+set fo-=r
+set fo+=t
+function! Exec(cmd)
+	redir @a
+		exec printf('silent %s',a:cmd)
+	redir END
+	tabnew
+	norm "ap
+endfunction
+syntax enable
+syntax on
+cnoremap <C-P> <Up>
+cnoremap <C-N> <Down>
+if (has("nvim"))
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
+set termguicolors
 ]]
-
--- set up plugins
-local util = require 'packer.util'
-require('packer').startup({function()
-	use 'wbthomason/packer.nvim'
-	use { 'christoomey/vim-tmux-navigator', opt = false }
-	use { 'neovim/nvim-lspconfig', ft = {'php'}, config  = function() require 'lsp_config_packer' end }
-	use { "ray-x/lsp_signature.nvim", config = function() require "lsp_signature".setup(cfg) end  }
-end,
-config = {
-	opt_default = true,
-	compile_path = util.join_paths(vim.fn.stdpath('config'), 'compiled_packer_config', 'packer_compiled.lua'),
-	auto_clean = false
-}})
+require'maps'
+require'persistent_undo_cfg'
+require'plugins'
+vim.cmd[[luafile ~/.config/nvim/compiled_packer_config/packer_compiled.lua]]
 
 -- set up tmux nav
 require'tmux_nav_vim_cfg'
-require'persistent_undo_cfg'
+
+
