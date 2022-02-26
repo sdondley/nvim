@@ -25,7 +25,6 @@ set fo-=c
 set fo-=o
 set fo-=r
 set fo+=t
-filetype plugin on
 function! Exec(cmd)
 	redir @a
 		exec printf('silent %s',a:cmd)
