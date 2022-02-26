@@ -1,6 +1,7 @@
 -- these are essential settings for all vim configs
 vim.cmd[[
 packadd packer.nvim
+ftplugin ftdetect indent on
 set mouse=a
 set clipboard=unnamed 
 set background=dark
