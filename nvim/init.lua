@@ -3,6 +3,17 @@ vim.cmd[[
 packadd packer.nvim
 set clipboard=unnamed 
 filetype plugin on
+function! Exec(cmd)
+	redir @a
+		exec printf('silent %s',a:cmd)
+	redir END
+	tabnew
+	norm "ap
+endfunction
+syntax enable
+syntax on
+cnoremap <C-P> <Up>
+cnoremap <C-N> <Down>
 ]]
 
 -- set up plugins
@@ -20,4 +31,5 @@ config = {
 -- set up tmux nav
 require'tmux_nav_vim_cfg'
 require'persistent_undo_cfg'
+
 
