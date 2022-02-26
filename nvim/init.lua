@@ -2,6 +2,7 @@
 vim.cmd[[
 syntax enable
 syntax on
+filetype plugin indent on
 set clipboard=unnamed 
 "filetype plugin indent on
 function! Exec(cmd)
