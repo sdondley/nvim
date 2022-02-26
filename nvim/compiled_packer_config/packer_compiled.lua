@@ -69,24 +69,11 @@ end
 time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
-  ["coc.nvim"] = {
+  ["packer.nvim"] = {
     loaded = false,
     needs_bufread = false,
-    only_cond = false,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/coc.nvim",
-    url = "https://github.com/neoclide/coc.nvim"
-  },
-  ["packer.nvim"] = {
-    loaded = true,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/packer.nvim",
+    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/packer.nvim",
     url = "https://github.com/wbthomason/packer.nvim"
-  },
-  ["phpfolding.vim"] = {
-    loaded = false,
-    needs_bufread = true,
-    only_cond = false,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/phpfolding.vim",
-    url = "https://github.com/rayburgemeestre/phpfolding.vim"
   },
   ["vim-tmux-navigator"] = {
     loaded = true,
@@ -96,13 +83,6 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
-vim.cmd [[augroup packer_load_aucmds]]
-vim.cmd [[au!]]
-  -- Filetype lazy-loads
-time([[Defining lazy-load filetype autocommands]], true)
-vim.cmd [[au FileType php ++once lua require("packer.load")({'phpfolding.vim', 'coc.nvim'}, { ft = "php" }, _G.packer_plugins)]]
-time([[Defining lazy-load filetype autocommands]], false)
-vim.cmd("augroup END")
 if should_profile then save_profiles() end
 
 end)
