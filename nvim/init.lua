@@ -2,7 +2,7 @@
 vim.cmd[[
 packadd packer.nvim
 set clipboard=unnamed 
-set plugin on
+filetype plugin on
 ]]
 
 -- set up plugins
