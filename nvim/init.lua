@@ -4,7 +4,7 @@ syntax enable
 syntax on
 packadd packer.nvim
 set clipboard=unnamed 
-filetype plugin on
+filetype plugin indent on
 function! Exec(cmd)
 	redir @a
 		exec printf('silent %s',a:cmd)
@@ -25,6 +25,8 @@ local util = require 'packer.util'
 require('packer').startup({function()
 	use 'wbthomason/packer.nvim'
 	use { 'christoomey/vim-tmux-navigator', opt = false }
+	use { 'rayburgemeestre/phpfolding.vim', ft = { 'php' } }
+	use { 'neoclide/coc.nvim', branch = 'release', ft = { 'php' } }
 end,
 config = {
 	opt_default = true,
