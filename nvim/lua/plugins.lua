@@ -14,7 +14,7 @@ return require('packer').startup( {
 	end,
 	config = {
 		opt_default = true,
-		compile_path = util.join_paths(vim.fn.stdpath('config'), 'compiled_packer_config', 'packer_compiled.lua'),
+		compile_path = util.join_paths(vim.fn.stdpath('config'), '.compiled_packer_config', 'packer_compiled.lua'),
 		auto_clean = false
 	},
 })
