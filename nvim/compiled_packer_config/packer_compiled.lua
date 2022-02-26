@@ -76,20 +76,13 @@ _G.packer_plugins = {
     url = "https://github.com/wbthomason/packer.nvim"
   },
   ["vim-tmux-navigator"] = {
-    cond = { true },
-    loaded = false,
-    needs_bufread = false,
-    only_cond = true,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/vim-tmux-navigator",
+    loaded = true,
+    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/vim-tmux-navigator",
     url = "https://github.com/christoomey/vim-tmux-navigator"
   }
 }
 
 time([[Defining packer_plugins]], false)
--- Conditional loads
-time([[Conditional loading of vim-tmux-navigator]], true)
-  require("packer.load")({"vim-tmux-navigator"}, {}, _G.packer_plugins)
-time([[Conditional loading of vim-tmux-navigator]], false)
 if should_profile then save_profiles() end
 
 end)
