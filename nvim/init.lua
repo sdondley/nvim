@@ -9,6 +9,8 @@ local util = require 'packer.util'
 require('packer').startup({function()
 	use 'wbthomason/packer.nvim'
 	use { 'christoomey/vim-tmux-navigator', opt = false }
+	use { 'neovim/nvim-lspconfig', ft = {'php'}, config  = function() require 'lsp_config_packer' end }
+	use { "ray-x/lsp_signature.nvim", config = function() require "lsp_signature".setup(cfg) end  }
 end,
 config = {
 	opt_default = true,
@@ -19,4 +21,3 @@ config = {
 -- set up tmux nav
 require'tmux_nav_vim_cfg'
 require'persistent_undo_cfg'
-
