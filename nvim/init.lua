@@ -2,6 +2,7 @@
 vim.cmd[[
 packadd packer.nvim
 set clipboard=unnamed 
+ftp plugin on
 ]]
 
 -- set up plugins
