@@ -2,7 +2,8 @@ vim.cmd[[
 packadd packer.nvim
 augroup packer_user_config
   autocmd!
-  autocmd BufWritePost plugins.lua source <afile> | PackerCompile
+  autocmd BufWritePost */plugins.lua source <afile> | PackerCompile
+  autocmd BufWinLeave */plugins.lua sleep 50m
 augroup end
 ]]
 
