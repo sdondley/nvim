@@ -2,6 +2,8 @@
 vim.cmd[[
 packadd packer.nvim
 set clipboard=unnamed 
+cnoremap <C-P> <Up>
+cnoremap <C-N> <Down>
 ]]
 require'persistent_undo_cfg'
 require'plugins'
