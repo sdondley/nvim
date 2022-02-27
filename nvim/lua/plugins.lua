@@ -12,7 +12,7 @@ return require('packer').startup( {
 	function()
 		use 'wbthomason/packer.nvim'
 		use { 'christoomey/vim-tmux-navigator', opt = false }
-	    use { 'neovim/nvim-lspconfig', ft = {'php'}, config  = function() require 'lsp_config_packer' end }
+	    use { 'neovim/nvim-lspconfig', ft = {'php', 'perl'}, config  = function() require 'lsp_config_packer' end }
 	end,
 	config = {
 		opt_default = true,
