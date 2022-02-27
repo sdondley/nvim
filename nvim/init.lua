@@ -45,3 +45,4 @@ vim.cmd[[luafile ~/.config/nvim/.compiled_packer_config/packer_compiled.lua]]
 
 -- set up tmux nav
 require'tmux_nav_vim_cfg'
+-- add comm
