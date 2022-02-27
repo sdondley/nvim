@@ -32,24 +32,9 @@ end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
-local servers = { 'intelephense' }
+local servers = { 'PLS' }
 for _, lsp in pairs(servers) do
   require('lspconfig')[lsp].setup {
-	settings = {
-                intelephense = {
-                    licence_key = '00RDZ68SUF6AZVO',
-                    stubs = {
-                        "wordpress",
-                        "wordpress-globals",
-                        "wp-cli",
-                        "genesis",
-                        "polylang"
-                    },
-                    files = {
-                        maxSize = 5000000;
-                    };
-                }
-	},
 	on_attach = on_attach,
 	flags = {
 		-- This will be the default in neovim 0.7+
