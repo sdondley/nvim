@@ -31,12 +31,12 @@ function! Exec(cmd)
 endfunction
 syntax enable
 syntax on
-cnoremap <C-P> <Up>
-cnoremap <C-N> <Down>
 if (has("nvim"))
     let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
 set termguicolors
+cnoremap <C-P> <Up>
+cnoremap <C-N> <Down>
 ]]
 require'maps'
 require'persistent_undo_cfg'
