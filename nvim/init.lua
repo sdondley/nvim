@@ -1,5 +1,10 @@
 -- these are essential settings for all vim configs
 vim.cmd[[
+augroup packer_user_config
+  autocmd!
+  autocmd BufWritePost */plugins.lua source <afile> | PackerCompile 
+  autocmd BufWinLeave */plugins.lua sleep 50m
+augroup end
 syntax enable
 syntax on
 filetype plugin indent on
@@ -48,5 +53,6 @@ vim.cmd[[luafile ~/.config/nvim/.compiled_packer_config/packer_compiled.lua]]
 
 -- set up tmux nav
 require'tmux_nav_vim_cfg'
+
 
 
