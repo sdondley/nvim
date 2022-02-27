@@ -8,4 +8,5 @@ nnoremap <silent>  <f5>  :call ToggleSyntax()<CR>
 " turn off highlighting
 nnoremap \\ :noh<cr>
 inoremap <Leader><Leader> <c-x><c-f>
+nnoremap <leader>q :q
 ]]
