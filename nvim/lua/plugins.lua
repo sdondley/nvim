@@ -11,6 +11,7 @@ return require('packer').startup( {
 	function()
 		use 'wbthomason/packer.nvim'
 		use { 'christoomey/vim-tmux-navigator', opt = false }
+        use { 'neoclide/coc.nvim', branch = 'release' }
 	end,
 	config = {
 		opt_default = true,
