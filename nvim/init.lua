@@ -83,14 +83,14 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 local lspconfig = require('lspconfig');
 --local servers = { 'perlpls', 'perlls' }
---local servers = { 'perlpls' }
-local servers = { 'perlls' }
+local servers = { 'perlpls' }
 for _, lsp in pairs(servers) do
   lspconfig[lsp].setup {
     --root_dir = util.find_git_ancestor,
     settings = { 
     perl = { 
         perlcritic = { enabled = true },
+        syntax = { enabled = true },
     } 
   },
     single_file_support = true,
