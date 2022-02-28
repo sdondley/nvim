@@ -1,5 +1,10 @@
 vim.cmd[[
 packadd packer.nvim
+packadd nvim-lspconfig
+packadd nvim-cmp
+packadd cmp-nvim-lsp
+packadd cmp_luasnip
+packadd LuaSnip
 augroup packer_user_config
   autocmd!
   autocmd BufWritePost */plugins.lua source <afile> | PackerCompile
@@ -12,7 +17,11 @@ return require('packer').startup( {
 	function()
 		use 'wbthomason/packer.nvim'
 		use { 'christoomey/vim-tmux-navigator', opt = false }
-	    use { 'neovim/nvim-lspconfig', ft = {'php', 'perl'}, config  = function() require 'lsp_config_packer' end }
+	    use { 'neovim/nvim-lspconfig', opt = true, ft = 'perl' }
+        use { 'hrsh7th/nvim-cmp' } -- Autocompletion plugin
+        use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
+        use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
+        use 'L3MON4D3/LuaSnip' -- Snippets plugin
 	end,
 	config = {
 		opt_default = true,

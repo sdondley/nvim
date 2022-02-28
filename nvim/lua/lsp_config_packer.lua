@@ -31,19 +31,24 @@ end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
+--local capabilities = vim.lsp.protocol.make_client_capabilities()
+--capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+local lspconfig = require('lspconfig');
 local servers = { 'perlpls' }
 for _, lsp in pairs(servers) do
-  require('lspconfig')[lsp].setup {
+  lspconfig[lsp].setup {
     settings = { 
     perl = { 
-        perlcritic = { enabled = true }
+        perlcritic = { enabled = true },
+        inc = { '~/perl5/perlbrew/perls/perl-5.34.0/lib' }
+
     } 
   },
 	on_attach = on_attach,
+    --capabilities = capabilities,
 	flags = {
 		-- This will be the default in neovim 0.7+
 		debounce_text_changes = 150,
 	}
   }
 end
-
