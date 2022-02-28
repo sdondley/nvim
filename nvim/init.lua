@@ -1,4 +1,4 @@
--- these are essential settings for all vim configs
+vim.g.mapleader = ";"
 vim.cmd[[
 packadd packer.nvim
 filetype plugin indent on
