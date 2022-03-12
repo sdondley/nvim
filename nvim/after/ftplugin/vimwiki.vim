@@ -3,8 +3,20 @@ setlocal foldenable
 setlocal foldmethod=expr
 setlocal foldexpr=VimwikiFoldLevelCustom(v:lnum)
 
-nnoremap <leader>www :silent w!<cr>:silent Vimwiki2HTML<cr>:silent !git add .<cr>:silent !git commit . -m 'update site'<cr>:silent !git push<cr>
-nnoremap <leader>wwwa :w!<cr>:silent VimwikiAll2HTML<cr>:silent !git add .<cr>:silent !git commit . -m 'update site'<cr>:silent !git push<cr>
+"nnoremap <leader>www :silent w!<cr>:silent Vimwiki2HTML<cr>:silent !git add .<cr>:silent !git commit . -m 'update site'<cr>:silent !git push<cr>
+"nnoremap <leader>wwwa :w!<cr>:silent VimwikiAll2HTML<cr>:silent !git add .<cr>:silent !git commit . -m 'update site'<cr>:silent !git push<cr>
+nnoremap <leader>www :silent w!<cr>:silent Vimwiki2HTML<cr>:call PushSite()<cr>
+nnoremap <leader>wwwa :silent w!<cr>:silent VimwikiAll2HTML<cr>:call PushSite()<cr>
+
+function! PushSite()
+    :silent !cd private; git add .
+    :silent !cd private; git commit . -m 'update site'
+    :silent !cd html/private; git add .
+    :silent !cd html/private; git commit . -m 'update site'
+    :silent !git add .
+    :silent !git commit . -m 'update site'
+    :silent !git push --recurse-submodules=on-demand
+endfunction
 
 
 function! MyFoldText()

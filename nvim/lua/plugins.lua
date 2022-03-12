@@ -15,6 +15,7 @@ return require('packer').startup(function()
     { 'windwp/nvim-autopairs', 		    opt = true, ft = {'php', 'perl'}, config = function() require('autopairs_cfg') end },
     { 'neovim/nvim-lspconfig', 		    opt = true, cond = true},
     { 'vimwiki/vimwiki', 		    opt = true, ft = 'markdown', branch = 'dev' },
+    --{ 'WnP/vimwiki_markdown', 		    opt = true, ft = 'markdown'},
     { 'junegunn/fzf.vim', 		    opt = true, cond = true, branch = 'master',
     					    requires = {'junegunn/fzf', opt = true, cond = true, cmd = 'fzf#install()' } },
     { 'sedm0784/vim-you-autocorrect', 	    opt = true },

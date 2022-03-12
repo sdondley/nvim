@@ -256,7 +256,7 @@ function! RipgrepFzf(query, fullscreen, dir)
   let spec = {'options': [ '--preview-window' , '~2', '--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
-command! -nargs=* -bang RG call  RipgrepFzf(<q-args>, <bang>0, './')
+command! -nargs=* -bang RG call  RipgrepFzf(<q-args>, <bang>0, fnamemodify('~', ':p') . './')
 command! -nargs=* -bang RGN call RipgrepFzf(<q-args>, <bang>0, fnamemodify('~', ':p') . 'notes/')
 command! -nargs=* -bang RGC call RipgrepFzf(<q-args>, <bang>0, fnamemodify('~', ':p') . 'git_repos/websites/climate_change_chat/')
 command! -nargs=* -bang RGR call RipgrepFzf(<q-args>, <bang>0, '~/scripts/lib')
