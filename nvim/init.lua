@@ -181,7 +181,6 @@ inoremap <leader>imy <esc>Bimy $<esc>ea =
 highlight Status ctermbg=darkgrey ctermfg=white
 highlight MatchParen cterm=underline ctermbg=none ctermfg=red
 set statusline=%#warningmsg#
-"set statusline+=-\ %{SyntasticStatuslineFlag()}
 set statusline+=%#Status#
 set statusline+=%=%f
 "set statusline+=%#PmenuSel#
@@ -189,16 +188,6 @@ set statusline+=%=%f
 set laststatus=2
 
 nmap <F11> :windo lcl\|ccl<CR>
-let g:syntastic_enable_perl_checker = 1
-let g:syntastic_enable_raku_checker = 1
-let g:syntastic_raku_checkers = ["raku"]
-let g:syntastic_raku_lib_path = ['lib']
-let g:syntastic_perl_lib_path = ['lib']
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
 set conceallevel=2
 syntax match Text /^_desc.*/ conceal
 syntax match Text /^my @.*tas.*/ conceal

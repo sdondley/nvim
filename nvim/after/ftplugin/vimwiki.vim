@@ -18,6 +18,17 @@ function! PushSite()
     :silent !git push --recurse-submodules=on-demand
 endfunction
 
+function! ListFiles()
+    let path = expand('%:p:h') . '/files'
+    let out = '# Files' . "\n" . '<ul><div class="file-listing">'
+    let html = system("tree -nDhH files" . ' ' . path)
+    let html = substitute(html, '<.*Tree</h1><p>', '', 'g')
+    let html = substitute(html, '\s\+<hr>.*</html>', '', 'g')
+    let html = html . '</div></ul>'
+
+    :put =(out . html)
+endfunction
+
 
 function! MyFoldText()
     let comment = substitute(getline(v:foldstart),"^ *","",1)
@@ -89,7 +100,18 @@ hi TaskWithAnn ctermfg=white
 nnoremap <Leader>gw :read !~/bin/copy_safari_url.osa; lynx -dump -nolist $(pbpaste)<cr>
 
 " create link line to a new page
-inoremap <leader>wlp <esc>^y$i[<esc>$a](<esc>pa)<esc>:VimwikiFollowLink<cr>i# <esc>p:w<cr>a<cr><cr>
+inoremap <leader>wlp <esc>:call NewWikiPage()<cr>
+nnoremap <leader>wlp :call NewWikiPage()<cr>
+
+function! NewWikiPage()
+    :normal '^'
+    let char = matchstr(getline('.'), '\%' . col('.') . 'c.')
+    if (char == '*') 
+        :normal w
+    endif
+    :exe "normal y$i[\<esc>$a](\<esc>pa)\<esc>:VimwikiFollowLink\<cr>:VimwikiTOC\<cr>o\<cr># \<esc>p:w\<cr>a\<cr>\<cr>"
+            
+endfunction
 
 inoremap <leader>wta <esc>gg$a<cr><cr>##<space>Tasks<space><bar><bar><space>project:<esc>maa<space>project.is:<space>+st<cr><cr>###<space>Outstanding<space><bar><space>+PENDING<cr><cr>###<space>Completed<space><bar><space>+COMPLETED $C<esc>`a
 

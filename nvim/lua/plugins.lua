@@ -13,6 +13,7 @@ return require('packer').startup(function()
     { 'jebaum/vim-tmuxify', 		    opt = true, cond = true },
     { 'c9s/perlomni.vim', 		    opt = true, ft = {"perl"} },
     { 'windwp/nvim-autopairs', 		    opt = true, ft = {'php', 'perl'}, config = function() require('autopairs_cfg') end },
+    { 'vim-syntastic/syntastic',	    opt = true, ft = {'php', 'perl'}},
     { 'neovim/nvim-lspconfig', 		    opt = true, cond = true},
     { 'vimwiki/vimwiki', 		    opt = true, ft = 'markdown', branch = 'dev' },
     --{ 'WnP/vimwiki_markdown', 		    opt = true, ft = 'markdown'},
