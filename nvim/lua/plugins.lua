@@ -1,22 +1,12 @@
-vim.cmd[[
-packadd packer.nvim
-augroup packer_user_config
-  autocmd!
-  autocmd BufWritePost */plugins.lua source <afile> | PackerCompile
-  autocmd BufWinLeave */plugins.lua sleep 50m
-augroup end
-]]
+vim.cmd [[packadd packer.nvim]]
 
-local util = require 'packer.util'
-return require('packer').startup( {
-	function()
-		use 'wbthomason/packer.nvim'
-		use { 'christoomey/vim-tmux-navigator', opt = false }
-	end,
-	config = {
-		opt_default = true,
-		compile_path = util.join_paths(vim.fn.stdpath('config'), '.compiled_packer_config', 'packer_compiled.lua'),
-		auto_clean = false
-	},
-})
+return require('packer').startup(function()
+  use {
+    { 'wbthomason/packer.nvim',		    opt = false },
+    { 'christoomey/vim-tmux-navigator',	    opt = true, cond = true },
+    { 'jebaum/vim-tmuxify', 		    opt = true, cond = true },
+    --{ 'vimwiki/vimwiki', 		    opt = true, ft = 'markdown', branch = 'dev' },
+    --{ 'tools-life/taskwiki', 		    opt = true, ft = 'markdown', branch = 'master' },
+}
+end)
 
