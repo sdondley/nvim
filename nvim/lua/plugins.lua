@@ -20,7 +20,7 @@ return require('packer').startup(function()
     { 'junegunn/fzf.vim', 		    opt = true, cond = true, branch = 'master',
     					    requires = {'junegunn/fzf', opt = true, cond = true, cmd = 'fzf#install()' } },
     { 'sedm0784/vim-you-autocorrect', 	    opt = true },
-    { 'tools-life/taskwiki', 		    opt = true, ft = 'markdown', branch = 'master' },
+     { 'tools-life/taskwiki', 		    opt = true, ft = 'markdown', branch = 'master' },
     { 'ms-jpq/coq_nvim', 		    opt = true, branch = 'coq', },
     { 'neoclide/coc.nvim', 		    opt = true, ft = {'php'}, branch = 'release' },
     { 'ms-jpq/coq.artifacts',  		    opt = true, branch = 'artifacts' },

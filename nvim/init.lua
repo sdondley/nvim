@@ -144,7 +144,7 @@ endfunction
 vnoremap <silent> <C-r> :<C-u>call Comment()<cr><cr>
 
 let g:taskwiki_markup_syntax = 'markdown'
-
+let g:taskwiki_dont_fold=1
 
 "lua require('lsp-config')
 "lua require('formatting')
@@ -194,14 +194,14 @@ syntax match Text /^my @.*tas.*/ conceal
 
 
 " remember last cursor position between files
-augroup redhat
-autocmd!
+"augroup redhat
+"autocmd!
 " When editing a file, always jump to the last cursor position
-autocmd BufReadPost *
-\ if line("'\"") > 0 && line ("'\"") <= line("$") |
-\   exe "normal! g'\"" |
-\ endif
-augroup END
+"autocmd BufReadPost *
+"\ if line("'\"") > 0 && line ("'\"") <= line("$") |
+"\   exe "normal! g'\"" |
+"\ endif
+"augroup END
 "
 
 "====[ Use persistent undo ]=================
@@ -369,8 +369,8 @@ let g:vimwiki_list=[
       \   'links_space_char': '-',
       \   'ext': '.md',
       \   'name': 'cccfr',
-      \   'custom_wiki2html': '~/bin/wiki2html.raku',
-      "\   'custom_wiki2html': 'vimwiki_markdown',
+      "\   'custom_wiki2html': '~/bin/wiki2html.raku',
+      \   'custom_wiki2html': 'vimwiki_markdown',
       \   'template_path': '~/git_repos/websites/climate_change_chat/templates/',
       \   'template_default': 'default',
       \   'template_ext': '.tpl',
@@ -380,7 +380,7 @@ let g:vimwiki_list=[
       \   'css_name': 'css/style.css' },
     \ {'path': '~/vimwiki/steve/*', 'syntax': 'markdown', 'ext': '.md'},  
     \ {'path': '~/Documents/vimwiki/client_wikis', 'syntax': 'markdown', 'ext': '.md'}, 
-    \ {'path': '~/notes/', 'auto_toc': 1, 'syntax': 'markdown', 'ext': '.md', 'name': 'notes'}, 
+    \ {'path': '~/Documents/notes/', 'auto_toc': 1, 'syntax': 'markdown', 'ext': '.md', 'name': 'notes'}, 
     \ {'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md', 'name': 'nice'} ]
 
 autocmd BufEnter *.txt set filetype=vimwiki

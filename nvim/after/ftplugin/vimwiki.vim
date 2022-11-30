@@ -5,7 +5,7 @@ setlocal foldexpr=VimwikiFoldLevelCustom(v:lnum)
 
 "nnoremap <leader>www :silent w!<cr>:silent Vimwiki2HTML<cr>:silent !git add .<cr>:silent !git commit . -m 'update site'<cr>:silent !git push<cr>
 "nnoremap <leader>wwwa :w!<cr>:silent VimwikiAll2HTML<cr>:silent !git add .<cr>:silent !git commit . -m 'update site'<cr>:silent !git push<cr>
-nnoremap <leader>www :silent w!<cr>:silent Vimwiki2HTML<cr>:call PushSite()<cr>
+nnoremap <leader>www :silent w!<cr>:Vimwiki2HTML<cr>:call PushSite()<cr>
 nnoremap <leader>wwwa :silent w!<cr>:silent VimwikiAll2HTML<cr>:call PushSite()<cr>
 
 function! PushSite()
