@@ -9,23 +9,26 @@ vim.api.nvim_command('packadd packer.nvim')
 
 local no_errors, error_msg = pcall(function()
 
-  local time
-  local profile_info
-  local should_profile = false
-  if should_profile then
-    local hrtime = vim.loop.hrtime
-    profile_info = {}
-    time = function(chunk, start)
-      if start then
-        profile_info[chunk] = hrtime()
-      else
-        profile_info[chunk] = (hrtime() - profile_info[chunk]) / 1e6
-      end
+_G._packer = _G._packer or {}
+_G._packer.inside_compile = true
+
+local time
+local profile_info
+local should_profile = false
+if should_profile then
+  local hrtime = vim.loop.hrtime
+  profile_info = {}
+  time = function(chunk, start)
+    if start then
+      profile_info[chunk] = hrtime()
+    else
+      profile_info[chunk] = (hrtime() - profile_info[chunk]) / 1e6
     end
-  else
-    time = function(chunk, start) end
   end
-  
+else
+  time = function(chunk, start) end
+end
+
 local function save_profiles(threshold)
   local sorted_times = {}
   for chunk_name, time_taken in pairs(profile_info) do
@@ -38,14 +41,16 @@ local function save_profiles(threshold)
       results[i] = elem[1] .. ' took ' .. elem[2] .. 'ms'
     end
   end
+  if threshold then
+    table.insert(results, '(Only showing plugins that took longer than ' .. threshold .. ' ms ' .. 'to load)')
+  end
 
-  _G._packer = _G._packer or {}
   _G._packer.profile_output = results
 end
 
 time([[Luarocks path setup]], true)
-local package_path_str = "/Users/stevedondley/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?.lua;/Users/stevedondley/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?/init.lua;/Users/stevedondley/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?.lua;/Users/stevedondley/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?/init.lua"
-local install_cpath_pattern = "/Users/stevedondley/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/lua/5.1/?.so"
+local package_path_str = "/Users/steve/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?.lua;/Users/steve/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?/init.lua;/Users/steve/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?.lua;/Users/steve/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?/init.lua"
+local install_cpath_pattern = "/Users/steve/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/lua/5.1/?.so"
 if not string.find(package.path, package_path_str, 1, true) then
   package.path = package.path .. ';' .. package_path_str
 end
@@ -73,35 +78,38 @@ _G.packer_plugins = {
     loaded = false,
     needs_bufread = false,
     only_cond = false,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/coc-intelephense",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/coc-intelephense",
     url = "https://github.com/yaegassy/coc-intelephense"
   },
   ["coc.nvim"] = {
     loaded = false,
     needs_bufread = false,
     only_cond = false,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/coc.nvim",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/coc.nvim",
     url = "https://github.com/neoclide/coc.nvim"
   },
   ["coq.artifacts"] = {
     loaded = false,
     needs_bufread = false,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/coq.artifacts",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/coq.artifacts",
     url = "https://github.com/ms-jpq/coq.artifacts"
   },
   coq_nvim = {
     loaded = false,
     needs_bufread = true,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/coq_nvim",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/coq_nvim",
     url = "https://github.com/ms-jpq/coq_nvim"
   },
   fzf = {
+    commands = { "fzf#install()" },
+    cond = { true },
     load_after = {
       ["fzf.vim"] = true
     },
     loaded = false,
     needs_bufread = false,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/fzf",
+    only_cond = false,
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/fzf",
     url = "https://github.com/junegunn/fzf"
   },
   ["fzf.vim"] = {
@@ -110,7 +118,7 @@ _G.packer_plugins = {
     loaded = false,
     needs_bufread = false,
     only_cond = true,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/fzf.vim",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/fzf.vim",
     url = "https://github.com/junegunn/fzf.vim"
   },
   ["lsp_signature.nvim"] = {
@@ -118,7 +126,7 @@ _G.packer_plugins = {
     loaded = false,
     needs_bufread = false,
     only_cond = false,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/lsp_signature.nvim",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/lsp_signature.nvim",
     url = "https://github.com/ray-x/lsp_signature.nvim"
   },
   ["nvim-autopairs"] = {
@@ -126,7 +134,7 @@ _G.packer_plugins = {
     loaded = false,
     needs_bufread = false,
     only_cond = false,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/nvim-autopairs",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/nvim-autopairs",
     url = "https://github.com/windwp/nvim-autopairs"
   },
   ["nvim-lspconfig"] = {
@@ -134,7 +142,7 @@ _G.packer_plugins = {
     loaded = false,
     needs_bufread = false,
     only_cond = true,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/nvim-lspconfig",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/nvim-lspconfig",
     url = "https://github.com/neovim/nvim-lspconfig"
   },
   ["nvim-web-devicons"] = {
@@ -143,40 +151,47 @@ _G.packer_plugins = {
     },
     loaded = false,
     needs_bufread = false,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/nvim-web-devicons",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/nvim-web-devicons",
     url = "https://github.com/kyazdani42/nvim-web-devicons"
   },
   ["packer.nvim"] = {
     loaded = true,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/start/packer.nvim",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/start/packer.nvim",
     url = "https://github.com/wbthomason/packer.nvim"
   },
   ["perlomni.vim"] = {
     loaded = false,
     needs_bufread = true,
     only_cond = false,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/perlomni.vim",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/perlomni.vim",
     url = "https://github.com/c9s/perlomni.vim"
   },
   ["phpfolding.vim"] = {
     loaded = false,
     needs_bufread = true,
     only_cond = false,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/phpfolding.vim",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/phpfolding.vim",
     url = "https://github.com/rayburgemeestre/phpfolding.vim"
   },
   ["stylua-nvim"] = {
     loaded = false,
     needs_bufread = false,
     only_cond = false,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/stylua-nvim",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/stylua-nvim",
     url = "https://github.com/ckipp01/stylua-nvim"
+  },
+  syntastic = {
+    loaded = false,
+    needs_bufread = false,
+    only_cond = false,
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/syntastic",
+    url = "https://github.com/vim-syntastic/syntastic"
   },
   taskwiki = {
     loaded = false,
     needs_bufread = true,
     only_cond = false,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/taskwiki",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/taskwiki",
     url = "https://github.com/tools-life/taskwiki"
   },
   ["trouble.nvim"] = {
@@ -184,14 +199,14 @@ _G.packer_plugins = {
     config = { "\27LJ\2\n9\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\ftrouble\frequire\0" },
     loaded = false,
     needs_bufread = false,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/trouble.nvim",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/trouble.nvim",
     url = "https://github.com/folke/trouble.nvim"
   },
   ["vim-easy-align"] = {
     loaded = false,
     needs_bufread = false,
     only_cond = false,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/vim-easy-align",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/vim-easy-align",
     url = "https://github.com/junegunn/vim-easy-align"
   },
   ["vim-tmux-navigator"] = {
@@ -199,7 +214,7 @@ _G.packer_plugins = {
     loaded = false,
     needs_bufread = false,
     only_cond = true,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/vim-tmux-navigator",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/vim-tmux-navigator",
     url = "https://github.com/christoomey/vim-tmux-navigator"
   },
   ["vim-tmuxify"] = {
@@ -207,48 +222,61 @@ _G.packer_plugins = {
     loaded = false,
     needs_bufread = false,
     only_cond = true,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/vim-tmuxify",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/vim-tmuxify",
     url = "https://github.com/jebaum/vim-tmuxify"
   },
   ["vim-you-autocorrect"] = {
     loaded = false,
     needs_bufread = false,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/vim-you-autocorrect",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/vim-you-autocorrect",
     url = "https://github.com/sedm0784/vim-you-autocorrect"
   },
   vimwiki = {
     loaded = false,
     needs_bufread = true,
     only_cond = false,
-    path = "/Users/stevedondley/.local/share/nvim/site/pack/packer/opt/vimwiki",
+    path = "/Users/steve/.local/share/nvim/site/pack/packer/opt/vimwiki",
     url = "https://github.com/vimwiki/vimwiki"
   }
 }
 
 time([[Defining packer_plugins]], false)
 -- Conditional loads
-time([[Conditional loading of vim-tmuxify]], true)
-  require("packer.load")({"vim-tmuxify"}, {}, _G.packer_plugins)
-time([[Conditional loading of vim-tmuxify]], false)
-time([[Conditional loading of nvim-lspconfig]], true)
-  require("packer.load")({"nvim-lspconfig"}, {}, _G.packer_plugins)
-time([[Conditional loading of nvim-lspconfig]], false)
 time([[Conditional loading of fzf.vim]], true)
   require("packer.load")({"fzf.vim"}, {}, _G.packer_plugins)
 time([[Conditional loading of fzf.vim]], false)
 time([[Conditional loading of vim-tmux-navigator]], true)
   require("packer.load")({"vim-tmux-navigator"}, {}, _G.packer_plugins)
 time([[Conditional loading of vim-tmux-navigator]], false)
+time([[Conditional loading of nvim-lspconfig]], true)
+  require("packer.load")({"nvim-lspconfig"}, {}, _G.packer_plugins)
+time([[Conditional loading of nvim-lspconfig]], false)
+time([[Conditional loading of vim-tmuxify]], true)
+  require("packer.load")({"vim-tmuxify"}, {}, _G.packer_plugins)
+time([[Conditional loading of vim-tmuxify]], false)
+
+-- Command lazy-loads
+time([[Defining lazy-load commands]], true)
+pcall(vim.cmd, [[au CmdUndefined fzf#install() ++once lua require"packer.load"({'fzf'}, {}, _G.packer_plugins)]])
+time([[Defining lazy-load commands]], false)
+
 vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
 time([[Defining lazy-load filetype autocommands]], true)
-vim.cmd [[au FileType perl ++once lua require("packer.load")({'perlomni.vim', 'vim-easy-align', 'nvim-autopairs'}, { ft = "perl" }, _G.packer_plugins)]]
+vim.cmd [[au FileType perl ++once lua require("packer.load")({'syntastic', 'nvim-autopairs', 'perlomni.vim', 'vim-easy-align'}, { ft = "perl" }, _G.packer_plugins)]]
 vim.cmd [[au FileType lua ++once lua require("packer.load")({'stylua-nvim'}, { ft = "lua" }, _G.packer_plugins)]]
-vim.cmd [[au FileType php ++once lua require("packer.load")({'coc-intelephense', 'coc.nvim', 'phpfolding.vim', 'lsp_signature.nvim', 'vim-easy-align', 'nvim-autopairs'}, { ft = "php" }, _G.packer_plugins)]]
-vim.cmd [[au FileType markdown ++once lua require("packer.load")({'vimwiki', 'taskwiki'}, { ft = "markdown" }, _G.packer_plugins)]]
+vim.cmd [[au FileType php ++once lua require("packer.load")({'syntastic', 'lsp_signature.nvim', 'nvim-autopairs', 'coc-intelephense', 'coc.nvim', 'phpfolding.vim', 'vim-easy-align'}, { ft = "php" }, _G.packer_plugins)]]
+vim.cmd [[au FileType markdown ++once lua require("packer.load")({'taskwiki', 'vimwiki'}, { ft = "markdown" }, _G.packer_plugins)]]
 time([[Defining lazy-load filetype autocommands]], false)
 vim.cmd("augroup END")
+
+_G._packer.inside_compile = false
+if _G._packer.needs_bufread == true then
+  vim.cmd("doautocmd BufRead")
+end
+_G._packer.needs_bufread = false
+
 if should_profile then save_profiles() end
 
 end)
