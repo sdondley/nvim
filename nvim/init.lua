@@ -30,6 +30,7 @@ set fo-=r
 set fo+=t
 
 nnoremap <leader><leader> :w<cr>
+
 ]]
 
-
+require('init_tmux')
