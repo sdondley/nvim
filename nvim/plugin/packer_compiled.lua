@@ -264,10 +264,10 @@ vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
 time([[Defining lazy-load filetype autocommands]], true)
-vim.cmd [[au FileType perl ++once lua require("packer.load")({'syntastic', 'nvim-autopairs', 'perlomni.vim', 'vim-easy-align'}, { ft = "perl" }, _G.packer_plugins)]]
-vim.cmd [[au FileType lua ++once lua require("packer.load")({'stylua-nvim'}, { ft = "lua" }, _G.packer_plugins)]]
-vim.cmd [[au FileType php ++once lua require("packer.load")({'syntastic', 'lsp_signature.nvim', 'nvim-autopairs', 'coc-intelephense', 'coc.nvim', 'phpfolding.vim', 'vim-easy-align'}, { ft = "php" }, _G.packer_plugins)]]
+vim.cmd [[au FileType php ++once lua require("packer.load")({'syntastic', 'lsp_signature.nvim', 'vim-easy-align', 'nvim-autopairs', 'coc-intelephense', 'coc.nvim', 'phpfolding.vim'}, { ft = "php" }, _G.packer_plugins)]]
 vim.cmd [[au FileType markdown ++once lua require("packer.load")({'taskwiki', 'vimwiki'}, { ft = "markdown" }, _G.packer_plugins)]]
+vim.cmd [[au FileType lua ++once lua require("packer.load")({'stylua-nvim'}, { ft = "lua" }, _G.packer_plugins)]]
+vim.cmd [[au FileType perl ++once lua require("packer.load")({'syntastic', 'vim-easy-align', 'nvim-autopairs', 'perlomni.vim'}, { ft = "perl" }, _G.packer_plugins)]]
 time([[Defining lazy-load filetype autocommands]], false)
 vim.cmd("augroup END")
 
